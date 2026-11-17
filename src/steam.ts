@@ -4,7 +4,7 @@
  * Uses the client's own API (SteamClient.Apps), as ROM-Store does. Each
  * emulator gets one non-Steam shortcut: the AppImage itself, or
  * `flatpak run <id>` for a Flathub app. A shortcut that already starts the
- * same file or app is adopted instead of doubled. Only shortcuts EmuDecky made
+ * same file or app is adopted instead of doubled. Only shortcuts Emu Hub made
  * are removed when the emulator is uninstalled.
  */
 import { reportShortcut, shortcutPlan, ShortcutPlan } from "./api";
@@ -88,7 +88,7 @@ export function ensureShortcut(emuId: string): Promise<ShortcutResult> {
   });
 }
 
-/** Removes the shortcut if EmuDecky made it; forgets an adopted one. */
+/** Removes the shortcut if Emu Hub made it; forgets an adopted one. */
 export function removeShortcut(emuId: string): Promise<ShortcutResult> {
   return serial(async () => {
     const info = await shortcutPlan(emuId);

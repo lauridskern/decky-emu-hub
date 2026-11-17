@@ -57,7 +57,7 @@ const DeckFrame: FC<{ children: ReactNode }> = ({ children }) => {
       <div className="deck-box" style={{ width: DECK_W * scale, height: DECK_H * scale }}>
         <div className="deck-screen" style={{ transform: `scale(${scale})` }}>
           <div className="deck-bar top">
-            <span>EmuDecky</span>
+            <span>Emu Hub</span>
             <span>12:41 · 87%</span>
           </div>
           {children}

@@ -1,11 +1,11 @@
-"""EmuDecky's backend: catalogue + what is installed + updates + jobs.
+"""Emu Hub's backend: catalogue + what is installed + updates + jobs.
 
 main.py wraps every public coroutine here as a call the UI can make. Blocking
 work (flatpak, HTTP, file copies) runs on threads; the event loop only waits.
 
 Runtime files (DECKY_PLUGIN_RUNTIME_DIR):
-  installed.json   what EmuDecky installed or adopted, with versions
-  shortcuts.json   Steam shortcuts EmuDecky made or adopted, per emulator
+  installed.json   what Emu Hub installed or adopted, with versions
+  shortcuts.json   Steam shortcuts Emu Hub made or adopted, per emulator
   updates.json     the last update check and what was already announced
   backups/<emu>/   original config files from before a Deck preset
 """
@@ -152,7 +152,7 @@ class Service:
             "latest": latest_version,
             "latest_error": newest.get("error"),
             "update": self._has_update(emu, copy),
-            # Found (EmuDeck, by hand), so EmuDecky cannot tell its version.
+            # Found (EmuDeck, by hand), so Emu Hub cannot tell its version.
             "unknown_version": bool(copy and copy["method"] == "appimage" and not copy.get("key")
                                     and emu["source"]["type"] != "flathub"),
             "preset": {
@@ -199,7 +199,7 @@ class Service:
             record["preset_result"] = "applied" if result.get("ok") else result.get("error")
             changed = True
             if result.get("ok"):
-                self._emit_threadsafe("emudecky_notice", f"{emu['name']} is set up for the Deck",
+                self._emit_threadsafe("emuhub_notice", f"{emu['name']} is set up for the Deck",
                                       "Deck settings applied after its first start.")
         if changed:
             self._save_manifest()
@@ -261,7 +261,7 @@ class Service:
         if fresh:
             self._save_updates()
             if self.emit:
-                await self.emit("emudecky_updates", {"count": snapshot["updates"], "names": fresh})
+                await self.emit("emuhub_updates", {"count": snapshot["updates"], "names": fresh})
 
     def _plan(self, emu: Dict[str, Any], action: str, copy: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         if action == "uninstall":
@@ -277,7 +277,7 @@ class Service:
             return {"method": "flatpak", "app_id": emu["flatpak"], "installation": "user",
                     "version": (self.latest.get(emu["id"]) or {}).get("version")}
         if emu["source"]["type"] == "flathub":
-            raise ValueError(f"{emu['name']} is installed as a file EmuDecky cannot update")
+            raise ValueError(f"{emu['name']} is installed as a file Emu Hub cannot update")
         newest = releases.latest(emu, token=self.settings.get("github_token") or None)
         self.latest[emu["id"]] = newest
         apps = detect.apps_dir(self.home)
@@ -348,7 +348,7 @@ class Service:
                 if not result.get("ok") and result.get("state") == "waiting":
                     self.manifest[job.emu_id]["preset_pending"] = True
                     self._save_manifest()
-        self._emit_threadsafe("emudecky_job", {
+        self._emit_threadsafe("emuhub_job", {
             "emu_id": job.emu_id,
             "name": emu["name"],
             "action": job.action,

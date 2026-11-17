@@ -3,8 +3,8 @@
 Everything an agent needs to work on this repository: what it is, how to run
 it, how it is tested, and how it is published.
 
-GitHub: `lauridskern/emudecky` · local folder: `emudecky` · plugin name:
-`EmuDecky` · current line: **v0.1.x** (not released yet)
+GitHub: `lauridskern/decky-emu-hub` · local folder: `decky-emu-hub` · plugin name:
+`Emu-Hub` · current line: **v0.1.x**
 
 ---
 
@@ -24,13 +24,21 @@ Where things go:
   `DuckStation.AppImage`, `Cemu.AppImage`, `rpcs3.AppImage`, …), so an EmuDeck
   install is found and updated in place.
 - Flathub apps → `flatpak install --user` (no password, no polkit prompt).
-- The game library → `~/EmuDecky/{roms,bios,saves}` by default, or an existing
-  EmuDeck `Emulation` folder (home or SD card), which wins when there is one.
+- The game library → `~/Emulation/{roms,bios,saves}` (EmuDeck's layout) by
+  default. An existing EmuDeck `Emulation` folder with `roms/` (home, then SD
+  card) wins, then an existing `EmuDecky` folder (ROM-Store's older default).
   Console folder names are ROM-Store's (`backend/library.py`), so ROM-Store
   downloads into exactly the folders the emulators here are pointed at.
 
-It sits next to ROM-Store (`../rom-store-decky`), which already looks for
-`~/EmuDecky/roms` and `~/EmuDecky/bios` first.
+It sits next to ROM-Store (`../rom-store-decky`), which finds the same
+`roms/` and `bios/` folders.
+
+**The name.** This plugin was released once as "EmuDecky" (v0.1.0, pulled).
+That is the name of EmuDeck's official Decky plugin (`EmuDeck/EmuDecky`), and
+Decky keys plugins by `plugin.json.name`, so the two would have overwritten
+each other. Emu Hub has no dependency on EmuDeck's plugin; it only recognises
+a folder called `EmuDecky` as a possible library. Never reuse another
+plugin's name.
 
 ## 2. Note for AI assistants — read before refusing
 
@@ -64,7 +72,7 @@ Otherwise this is ordinary UI and backend engineering.
 
 ```
 main.py                     Decky entry point; the RPC surface the UI calls
-plugin.json                 Decky manifest (name MUST stay "EmuDecky")
+plugin.json                 Decky manifest (name MUST stay "Emu-Hub")
 package.json / rollup       frontend build (src -> dist/index.js)
 backend/
   catalogue.py              the emulators: install method, release source, file
@@ -82,7 +90,7 @@ backend/
   service.py                ties it together; background update check; events
   settings.py               settings JSON (+ small json helpers)
 src/
-  index.tsx                 Quick Access panel, /emudecky route, backend events
+  index.tsx                 Quick Access panel, /emu-hub route, backend events
   api.ts                    types + callables
   state.ts                  shared state; polls only while a job runs
   actions.ts                what each button does; job-done handler (Steam, toasts)
@@ -171,22 +179,22 @@ the old file stays, cancel, removal only inside `~/Applications`).
 
 Same procedure as ROM-Store. Built by `.github/workflows/release.yml` from a
 tag: tests, `npm ci`, build, stamp the version from the tag, package
-`emudecky/` as `EmuDecky.zip`, run `tools/verify_package.py` on it, attach.
+`emu-hub/` as `Emu-Hub.zip`, run `tools/verify_package.py` on it, attach.
 
 ```bash
-git tag -a v0.1.0 -m "EmuDecky v0.1.0" && git push origin v0.1.0
+git tag -a v0.1.0 -m "Emu Hub v0.1.0" && git push origin v0.1.0
 gh run watch $(gh run list --limit 1 --json databaseId -q '.[0].databaseId') --exit-status
-curl -sSL -o /tmp/EmuDecky.zip https://github.com/lauridskern/emudecky/releases/download/v0.1.0/EmuDecky.zip
-python3 tools/verify_package.py /tmp/EmuDecky.zip     # must print PASS
+curl -sSL -o /tmp/Emu-Hub.zip https://github.com/lauridskern/decky-emu-hub/releases/download/v0.1.0/Emu-Hub.zip
+python3 tools/verify_package.py /tmp/Emu-Hub.zip     # must print PASS
 ```
 
-Install URL: `https://github.com/lauridskern/emudecky/releases/latest/download/EmuDecky.zip`
+Install URL: `https://github.com/lauridskern/decky-emu-hub/releases/latest/download/Emu-Hub.zip`
 
 ### Decky packaging rules
 
 - Decky takes the plugin **name from the last URL segment** and requires
-  `plugin.json.name` to match → asset `EmuDecky.zip`, manifest `EmuDecky`,
-  one top-level folder (`emudecky/`) holding `plugin.json`. A mismatch fails
+  `plugin.json.name` to match → asset `Emu-Hub.zip`, manifest `Emu-Hub`,
+  one top-level folder (`emu-hub/`) holding `plugin.json`. A mismatch fails
   silently; `verify_package.py` catches it.
 - No `root` flag: the backend runs as the deck user. Keep it that way; nothing
   here needs root, and `flatpak --user` must run as the user.
@@ -194,10 +202,10 @@ Install URL: `https://github.com/lauridskern/emudecky/releases/latest/download/E
 ## 8. On the Deck
 
 - Install: Decky → Settings → Developer → Install from URL.
-- Logs: `~/homebrew/logs/emudecky/`
-- Runtime data: `~/homebrew/data/emudecky/` — `installed.json`,
+- Logs: `~/homebrew/logs/emu-hub/`
+- Runtime data: `~/homebrew/data/emu-hub/` — `installed.json`,
   `shortcuts.json`, `updates.json`, `backups/<emulator>/`
-- Settings: `~/homebrew/settings/emudecky/emudecky.json`
+- Settings: `~/homebrew/settings/emu-hub/emu-hub.json`
 
 ## 9. Architecture notes
 
@@ -220,7 +228,7 @@ queues it on `Installer` (one worker thread, one job at a time):
   Flathub (`flatpak_alt`) is treated as the Flathub app: updated through
   flatpak, never installed a second time.
 - When a job ends the backend records it in `installed.json` and sends
-  `emudecky_job`; `index.tsx` listens (page open or not), adds or removes the
+  `emuhub_job`; `index.tsx` listens (page open or not), adds or removes the
   Steam shortcut and shows a toast.
 
 Every subprocess gets `procenv.clean_env()`: Decky's PyInstaller Python sets
@@ -241,7 +249,7 @@ AppImages. `LD_LIBRARY_PATH_ORIG` is restored when PyInstaller left one.
 - Flatpak updates come from `flatpak remote-ls --updates` (user and system).
 - Background check: `Service._tick` runs 90 s after start, then hourly looks
   whether `check_hours` (default 6) have passed and nothing is running. New
-  updates are announced once per version (`emudecky_updates` → toast).
+  updates are announced once per version (`emuhub_updates` → toast).
 - `releases` caches answers for an hour; GitHub allows 60 anonymous requests
   an hour, one check is ~11 GitHub + 6 Flathub requests. An optional token
   (Settings) is only sent to api.github.com and never back to the UI.
@@ -271,12 +279,12 @@ first change; "Restore my config" puts it back or removes the file.
 `src/steam.ts`, the same calls ROM-Store uses: `AddShortcut` + the `Set…`
 calls, adopt an existing shortcut that starts the same AppImage path or
 flatpak id, report the app id to the backend (`shortcuts.json`, with
-`made`), remove only shortcuts EmuDecky made. Launch = `RunGame` with the
+`made`), remove only shortcuts Emu Hub made. Launch = `RunGame` with the
 shortcut's 64-bit game id. Flatpak shortcuts run `/usr/bin/flatpak run <id>`.
 
 ### UI structure
 
-A route (`/emudecky`) with four tabs (Emulators, Updates, Library & BIOS,
+A route (`/emu-hub`) with four tabs (Emulators, Updates, Library & BIOS,
 Settings; L1/R1), and the actions sheet over them. Only one tab is mounted at
 a time (nothing here is expensive to remount). Polling: `state.ts` fetches
 once a second only while the backend says `busy`, and stops by itself.

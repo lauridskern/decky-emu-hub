@@ -87,7 +87,7 @@ class FormatTest(unittest.TestCase):
 class PresetTest(unittest.TestCase):
     def setUp(self):
         self.home = tempfile.mkdtemp()
-        self.root = os.path.join(self.home, "EmuDecky")
+        self.root = os.path.join(self.home, "Emulation")
         os.makedirs(os.path.join(self.root, "roms", "ps2"))
         self.backups = presets.Backups(os.path.join(self.home, "runtime", "backups"))
 

@@ -22,7 +22,7 @@ const PRESET_HINT: Record<PresetState, string> = {
   applied: "In place. A again re-applies it.",
   partial: "Some of its settings differ (changed in the emulator, or never applied).",
   ready: "Not applied yet.",
-  waiting: "Start the emulator once first; EmuDecky applies it after that.",
+  waiting: "Start the emulator once first; Emu Hub applies it after that.",
 };
 
 interface Item {

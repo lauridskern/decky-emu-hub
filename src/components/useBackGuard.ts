@@ -1,13 +1,13 @@
 import { RefObject, useEffect, useRef } from "react";
 
-const MARKER = "emudeckyOverlay";
+const MARKER = "emuHubOverlay";
 // Each guard gets its own number, so stacked overlays (a screenshot opened from
 // the game panel) can tell whose history entry the back button removed.
 let nextGuardId = 1;
 // History entries outlive a reload of the page or the plugin, the numbering
 // does not. Entries are tagged with this load's token, so a stale entry with a
 // higher number is never mistaken for a newer overlay still being open.
-const SESSION_KEY = "emudeckySession";
+const SESSION_KEY = "emuHubSession";
 const SESSION = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
 type Entry = Record<string, unknown> | null;

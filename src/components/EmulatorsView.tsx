@@ -31,7 +31,7 @@ const EmulatorsView: FC<{ state: State | null; onMore: (id: string) => void }> =
       {!state.library.ready ? (
         <Focusable noFocusRing className="ed-banner warn" flow-children="row">
           <span style={{ flex: "1 1 auto" }}>
-            No game library yet. EmuDecky will make <span className="ed-path">{state.library.root}</span> with a folder per console.
+            No game library yet. Emu Hub will make <span className="ed-path">{state.library.root}</span> with a folder per console.
           </span>
           <Button className="ed-btn" noFocusRing onClick={makeFolders} disabled={making}>
             {making ? "Creating…" : "Create folders"}

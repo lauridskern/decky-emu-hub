@@ -4,7 +4,7 @@ import { Emulator } from "../api";
 
 /** Small visual pieces. None takes focus; the Focusable around them does. */
 
-export const Styles: FC = () => <style id="emudecky-styles" dangerouslySetInnerHTML={{ __html: CSS }} />;
+export const Styles: FC = () => <style id="emu-hub-styles" dangerouslySetInnerHTML={{ __html: CSS }} />;
 
 export const Glyph: FC<{ children: ReactNode; round?: boolean }> = ({ children, round }) => (
   <span className={`ed-glyph${round ? " round" : ""}`} aria-hidden="true">

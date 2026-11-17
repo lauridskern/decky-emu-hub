@@ -1,4 +1,4 @@
-"""The emulators EmuDecky knows, one entry each.
+"""The emulators Emu Hub knows, one entry each.
 
 Every entry says where the emulator comes from and how it is installed:
 

@@ -139,7 +139,7 @@ export default function App() {
             <span className="ed-brand-mark">
               <FaGamepad />
             </span>
-            EmuDecky
+            Emu Hub
           </div>
           <Focusable noFocusRing className="ed-tabs" flow-children="row">
             <Glyph>L1</Glyph>

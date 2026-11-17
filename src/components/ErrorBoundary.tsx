@@ -10,7 +10,7 @@ export default class ErrorBoundary extends Component<{ children: ReactNode; labe
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
     // eslint-disable-next-line no-console
-    console.error(`EmuDecky${this.props.label ? ` (${this.props.label})` : ""} crashed:`, error, info.componentStack);
+    console.error(`Emu Hub${this.props.label ? ` (${this.props.label})` : ""} crashed:`, error, info.componentStack);
   }
 
   render(): ReactNode {
@@ -18,7 +18,7 @@ export default class ErrorBoundary extends Component<{ children: ReactNode; labe
     if (!error) return this.props.children;
     return (
       <div className="ed-error-screen">
-        <h2>EmuDecky hit an error</h2>
+        <h2>Emu Hub hit an error</h2>
         <pre>{String(error?.message || error)}</pre>
       </div>
     );

@@ -49,20 +49,20 @@ jobs:
         run: |
           # Decky unpacks the zip into ~/homebrew/plugins and looks for a FOLDER
           # that holds plugin.json, so the package has one top level directory.
-          mkdir -p package/emudecky
+          mkdir -p package/emu-hub
           rsync -a \
             --exclude "node_modules/" --exclude "src/" --exclude ".git/" \
             --exclude ".github/" --exclude "__pycache__/" --exclude "*.pyc" \
             --exclude "tests/" --exclude ".claude/" --exclude "docs/" \
             --exclude "dist/*.map" --exclude "tools/" --exclude "package/" \
-            ./ package/emudecky/
-          cd package && zip -qr ../EmuDecky.zip emudecky
+            ./ package/emu-hub/
+          cd package && zip -qr ../Emu-Hub.zip emu-hub
 
       - name: Check the package the way Decky installs it
-        run: python3 tools/verify_package.py EmuDecky.zip
+        run: python3 tools/verify_package.py Emu-Hub.zip
 
       - name: Attach the package to a release
         uses: softprops/action-gh-release@v2
         with:
-          files: EmuDecky.zip
+          files: Emu-Hub.zip
           generate_release_notes: true

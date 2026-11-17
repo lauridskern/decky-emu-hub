@@ -107,7 +107,7 @@ class VersionTest(unittest.TestCase):
         self.assertFalse(releases.is_update({"version": "2.8.2", "key": "v2.8.2"}, newest))
         # never a downgrade
         self.assertFalse(releases.is_update({"version": "2.9.0", "key": "v2.9.0"}, newest))
-        # unknown version (found, not installed by EmuDecky): not an update by itself
+        # unknown version (found, not installed by Emu Hub): not an update by itself
         self.assertFalse(releases.is_update({"version": None, "key": None}, newest))
         # rolling: a new build date is an update
         self.assertTrue(releases.is_update({"version": "build 2026-10-01", "key": "latest@2026-10-01T00:00:00Z"},

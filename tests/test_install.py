@@ -98,6 +98,8 @@ class LibraryTest(unittest.TestCase):
     def test_emudeck_library_is_preferred(self):
         home = tempfile.mkdtemp()
         media = os.path.join(home, "media")
+        self.assertEqual(library.default_root(home, media + "/*/*"), os.path.join(home, "Emulation"))
+        os.makedirs(os.path.join(home, "EmuDecky"))
         self.assertEqual(library.default_root(home, media + "/*/*"), os.path.join(home, "EmuDecky"))
         os.makedirs(os.path.join(media, "deck", "sd", "Emulation", "roms"))
         self.assertEqual(library.default_root(home, media + "/*/*"), os.path.join(media, "deck", "sd", "Emulation"))
@@ -105,7 +107,7 @@ class LibraryTest(unittest.TestCase):
         self.assertEqual(library.default_root(home, media + "/*/*"), os.path.join(home, "Emulation"))
 
     def test_create_folders_uses_rom_store_names(self):
-        root = os.path.join(tempfile.mkdtemp(), "EmuDecky")
+        root = os.path.join(tempfile.mkdtemp(), "Emulation")
         result = library.create_folders(root)
         self.assertTrue(result["ok"])
         for name in ("roms/gc", "roms/psx", "roms/ps2", "roms/switch", "roms/3ds", "roms/arcades", "bios", "saves"):
@@ -118,7 +120,7 @@ class LibraryTest(unittest.TestCase):
 class BiosTest(unittest.TestCase):
     def test_found_and_missing(self):
         home = tempfile.mkdtemp()
-        folder = os.path.join(home, "EmuDecky", "bios")
+        folder = os.path.join(home, "Emulation", "bios")
         write(os.path.join(folder, "SCPH5501.BIN"))
         write(os.path.join(home, ".config", "Ryujinx", "system", "prod.keys"))
         report = {r["console"]: r for r in bios.report(["psx", "ps2", "switch", "nes"], folder, home)}

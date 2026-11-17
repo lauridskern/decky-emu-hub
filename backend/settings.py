@@ -8,7 +8,7 @@ import threading
 from typing import Any, Dict
 
 DEFAULTS: Dict[str, Any] = {
-    # "" = pick automatically (an EmuDeck library if there is one, else ~/EmuDecky)
+    # "" = pick automatically (an EmuDeck library if there is one, else ~/Emulation)
     "library_root": "",
     # Apply the Deck preset right after an emulator is installed.
     "auto_presets": True,

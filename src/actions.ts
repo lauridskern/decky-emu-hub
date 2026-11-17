@@ -106,7 +106,7 @@ export async function onJobDone(event: {
   refresh().catch(() => undefined);
   if (event.state === "cancelled") return;
   if (event.state !== "done") {
-    toaster.toast({ title: `${event.name}: ${event.action} failed`, body: event.error ?? "See EmuDecky for details" });
+    toaster.toast({ title: `${event.name}: ${event.action} failed`, body: event.error ?? "See Emu Hub for details" });
     return;
   }
   if (event.action === "uninstall") {

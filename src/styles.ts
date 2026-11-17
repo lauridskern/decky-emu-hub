@@ -1,5 +1,5 @@
 /**
- * EmuDecky's styles, rendered into the page by <Styles /> (Decky loads no CSS).
+ * Emu Hub's styles, rendered into the page by <Styles /> (Decky loads no CSS).
  *
  * Same rules as ROM-Store (AGENTS.md §10): built for 1280 x 800 at arm's
  * length, nothing under 12px, anything focusable at least 38px tall, focus is

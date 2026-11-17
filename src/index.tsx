@@ -10,7 +10,7 @@ import { onJobDone } from "./actions";
 import { refresh, setState, snapshot, subscribe } from "./state";
 import { ago } from "./components/ui";
 
-const ROUTE = "/emudecky";
+const ROUTE = "/emu-hub";
 
 const Page = () => (
   <ErrorBoundary label="page">
@@ -35,7 +35,7 @@ function Panel() {
       .then((next) => {
         setState(next);
         toaster.toast({
-          title: "EmuDecky",
+          title: "Emu Hub",
           body: next.updates ? `${next.updates} update${next.updates === 1 ? "" : "s"} available` : "Everything is up to date",
         });
       })
@@ -44,10 +44,10 @@ function Panel() {
 
   return (
     <ErrorBoundary label="panel">
-      <PanelSection title="EmuDecky">
+      <PanelSection title="Emu Hub">
         <PanelSectionRow>
           <ButtonItem layout="below" onClick={open}>
-            {state?.updates ? `Open EmuDecky · ${state.updates} update${state.updates === 1 ? "" : "s"}` : "Open EmuDecky"}
+            {state?.updates ? `Open Emu Hub · ${state.updates} update${state.updates === 1 ? "" : "s"}` : "Open Emu Hub"}
           </ButtonItem>
         </PanelSectionRow>
         <PanelSectionRow>
@@ -93,20 +93,20 @@ const onJob = (event: Parameters<typeof onJobDone>[0]) => {
 };
 
 export default definePlugin(() => {
-  addEventListener("emudecky_updates", onUpdates);
-  addEventListener("emudecky_notice", onNotice);
-  addEventListener("emudecky_job", onJob);
+  addEventListener("emuhub_updates", onUpdates);
+  addEventListener("emuhub_notice", onNotice);
+  addEventListener("emuhub_job", onJob);
   routerHook.addRoute(ROUTE, Page, { exact: true });
 
   return {
-    name: "EmuDecky",
-    titleView: <div className={staticClasses.Title}>EmuDecky</div>,
+    name: "Emu Hub",
+    titleView: <div className={staticClasses.Title}>Emu Hub</div>,
     content: <Panel />,
     icon: <FaGamepad />,
     onDismount() {
-      removeEventListener("emudecky_updates", onUpdates);
-      removeEventListener("emudecky_notice", onNotice);
-      removeEventListener("emudecky_job", onJob);
+      removeEventListener("emuhub_updates", onUpdates);
+      removeEventListener("emuhub_notice", onNotice);
+      removeEventListener("emuhub_job", onJob);
       routerHook.removeRoute(ROUTE);
     },
   };

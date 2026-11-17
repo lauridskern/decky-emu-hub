@@ -1,7 +1,7 @@
-"""What is installed: EmuDecky's own record, files in ~/Applications, flatpak.
+"""What is installed: Emu Hub's own record, files in ~/Applications, flatpak.
 
 Order of trust for each emulator:
-  1. the manifest (installed.json): EmuDecky installed or adopted it, and
+  1. the manifest (installed.json): Emu Hub installed or adopted it, and
      knows the version and release key
   2. a Flathub copy under any of its ids (`flatpak list`)
   3. an AppImage in ~/Applications whose name matches `detect`, or one of

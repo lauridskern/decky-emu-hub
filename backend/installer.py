@@ -196,7 +196,7 @@ def remove_appimage(job: Job, home: str) -> Dict[str, Any]:
     path = job.plan["path"]
     apps = os.path.realpath(os.path.join(home, "Applications"))
     real = os.path.realpath(path)
-    # Only files EmuDecky manages or found in ~/Applications, never elsewhere.
+    # Only files Emu Hub manages or found in ~/Applications, never elsewhere.
     if not real.startswith(apps + os.sep):
         raise RuntimeError("that file is not in ~/Applications, so it is left alone")
     if os.path.islink(path) or os.path.isfile(path):
@@ -220,7 +220,7 @@ class Installer:
         if self.thread and self.thread.is_alive():
             return
         self.stopping = False
-        self.thread = threading.Thread(target=self._loop, name="emudecky-installer", daemon=True)
+        self.thread = threading.Thread(target=self._loop, name="emu-hub-installer", daemon=True)
         self.thread.start()
 
     def stop(self) -> None:

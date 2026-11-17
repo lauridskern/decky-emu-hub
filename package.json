@@ -1,5 +1,5 @@
 {
-  "name": "emudecky",
+  "name": "emu-hub",
   "version": "0.1.0",
   "description": "Install, update and set up emulators from Game Mode",
   "type": "module",
@@ -8,8 +8,8 @@
     "watch": "rollup -c -w",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": ["decky", "plugin", "steam-deck", "emulators", "emudeck", "emudecky"],
-  "author": "EmuDecky contributors",
+  "keywords": ["decky", "plugin", "steam-deck", "emulators", "emudeck", "emu-hub"],
+  "author": "Emu Hub contributors",
   "license": "MIT",
   "devDependencies": {
     "@decky/rollup": "^1.0.2",

@@ -1,8 +1,8 @@
 {
-  "name": "emudecky-preview",
+  "name": "emu-hub-preview",
   "private": true,
   "type": "module",
-  "description": "Renders the EmuDecky UI outside the Steam client so it can be screenshotted and driven with keys.",
+  "description": "Renders the Emu Hub UI outside the Steam client so it can be screenshotted and driven with keys.",
   "scripts": {
     "build": "node build.mjs",
     "shots": "node build.mjs && node shoot.mjs",

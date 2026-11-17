@@ -1,6 +1,6 @@
 """Which consoles need system files, and whether this Deck has them.
 
-EmuDecky never downloads BIOS files, firmware or keys. It says which console
+Emu Hub never downloads BIOS files, firmware or keys. It says which console
 needs one, which file names the emulators look for and where they go, and
 checks whether a matching file is in place. File names follow ROM-Store's
 backend/bios.py (RetroArch, DuckStation, PCSX2, Flycast in `bios/`).

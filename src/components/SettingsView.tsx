@@ -113,7 +113,7 @@ const SettingsView: FC = () => {
         </Focusable>
       </Focusable>
       <p className="ed-note">
-        EmuDecky installs emulators from their projects' own releases and from Flathub, into ~/Applications and your Flatpak
+        Emu Hub installs emulators from their projects' own releases and from Flathub, into ~/Applications and your Flatpak
         apps. It never downloads games, BIOS files, firmware or keys.
       </p>
     </Focusable>

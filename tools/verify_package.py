@@ -13,7 +13,7 @@ and the name comes from the URL the user pasted (frontend/src/store.tsx):
 So the package has to contain a single top level folder, and the "name" key in
 plugin.json has to match the asset file name exactly.
 
-Usage:  python3 tools/verify_package.py [path/to/EmuDecky.zip]
+Usage:  python3 tools/verify_package.py [path/to/Emu-Hub.zip]
 """
 
 from __future__ import annotations
@@ -26,8 +26,8 @@ import tempfile
 import zipfile
 from urllib.parse import urlparse
 
-DEFAULT_ASSET = "EmuDecky.zip"
-URL = f"https://github.com/lauridskern/emudecky/releases/download/v1.0.0/{DEFAULT_ASSET}"
+DEFAULT_ASSET = "Emu-Hub.zip"
+URL = f"https://github.com/lauridskern/decky-emu-hub/releases/download/v1.0.0/{DEFAULT_ASSET}"
 
 
 def find_plugin_folder(plugin_path: str, name: str):

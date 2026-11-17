@@ -93,7 +93,7 @@ const UpdatesView: FC<{ state: State | null; onMore: (id: string) => void }> = (
         <section className="ed-section">
           <div className="ed-section-title">Version unknown</div>
           <p className="ed-note">
-            Installed by EmuDeck or by hand, so EmuDecky cannot tell which version these are. Replacing one with the newest
+            Installed by EmuDeck or by hand, so Emu Hub cannot tell which version these are. Replacing one with the newest
             release keeps its place and its settings, and from then on its updates show here.
           </p>
           <Focusable noFocusRing className="ed-rows" flow-children="column">

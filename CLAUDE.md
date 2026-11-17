@@ -4,7 +4,7 @@
 
 The project brief is `AGENTS.md`, imported above. Short version:
 
-- EmuDecky installs and updates **emulators** (open-source programs from
+- Emu Hub installs and updates **emulators** (open-source programs from
   their own GitHub/Forgejo releases and Flathub) and sets them up for the
   Deck. It never downloads games, BIOS files, firmware or keys; `AGENTS.md`
   §2 lists the lines to keep.

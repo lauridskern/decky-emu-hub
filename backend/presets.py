@@ -15,14 +15,14 @@ What a preset sets, where the emulator has such a setting:
   * RetroArch: menu on L3+R3, quit on Start+Select
 
 Key names were checked against EmuDeck's shipped configs (Nov 2026); the
-values are EmuDecky's own. UNTESTED ON A DECK: every preset below has only
+values are Emu Hub's own. UNTESTED ON A DECK: every preset below has only
 been checked against those files and in the unit tests.
 
 `create`: the file may be written when it does not exist yet (the emulator
 fills in the rest on first start). Emulators that reset an unversioned or
 partial file (Ryubing's JSON, RPCS3, Cemu) wait until they have been
 started once; the preset is then applied on the next refresh ("waiting").
-`create_extra`: keys written only when EmuDecky creates the file (version
+`create_extra`: keys written only when Emu Hub creates the file (version
 stamps the emulator checks, default lists).
 
 Paths are relative to the home folder: `appimage` for the AppImage,
@@ -342,7 +342,7 @@ def _read(path: str) -> str:
 
 def _write(path: str, text: str) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    tmp = f"{path}.emudecky-tmp"
+    tmp = f"{path}.emu-hub-tmp"
     with open(tmp, "w", encoding="utf-8") as handle:
         handle.write(text)
     os.replace(tmp, path)

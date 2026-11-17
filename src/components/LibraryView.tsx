@@ -7,7 +7,7 @@ import { Glyph, Spinner, tilde } from "./ui";
 
 /**
  * Where games and BIOS files live, and which consoles still need system
- * files. EmuDecky never downloads BIOS files, firmware or keys; it only
+ * files. Emu Hub never downloads BIOS files, firmware or keys; it only
  * checks for them.
  */
 const LibraryView: FC = () => {
@@ -50,11 +50,11 @@ const LibraryView: FC = () => {
 
   const withGames = info.consoles.filter((c) => c.files > 0).length;
   const folders = info.consoles.filter((c) => c.exists).length;
-  const choices = [{ path: "", label: "Automatic", hint: "An EmuDeck library if there is one, else ~/EmuDecky" }].concat(
+  const choices = [{ path: "", label: "Automatic", hint: "An EmuDeck library if there is one, else ~/Emulation" }].concat(
     info.candidates.map((c) => ({
       path: c.path,
       label: c.path,
-      hint: `${c.kind === "emudeck" ? "EmuDeck library" : "EmuDecky library"} · ${c.where === "sd" ? "SD card" : "internal storage"}`,
+      hint: `${c.kind === "emudeck" ? "EmuDeck library" : "EmuDecky folder"} · ${c.where === "sd" ? "SD card" : "internal storage"}`,
     })),
   );
 
@@ -102,7 +102,7 @@ const LibraryView: FC = () => {
       <section className="ed-section">
         <div className="ed-section-title">BIOS and system files</div>
         <p className="ed-note">
-          EmuDecky never downloads these. Copy them from your own consoles; this list shows what each emulator still needs.
+          Emu Hub never downloads these. Copy them from your own consoles; this list shows what each emulator still needs.
         </p>
         <Focusable noFocusRing className="ed-rows" flow-children="column">
           {info.bios_status.map((item) => (

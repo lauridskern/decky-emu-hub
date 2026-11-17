@@ -27,4 +27,4 @@ const ctx = await esbuild.context({
 
 await ctx.watch();
 const { port: actual } = await ctx.serve({ servedir: here, port, host: "localhost" });
-console.log(`EmuDecky UI preview: http://localhost:${actual}/`);
+console.log(`Emu Hub UI preview: http://localhost:${actual}/`);

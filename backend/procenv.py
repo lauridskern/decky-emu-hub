@@ -1,4 +1,4 @@
-"""Environment for the programs EmuDecky starts (flatpak, AppImages).
+"""Environment for the programs Emu Hub starts (flatpak, AppImages).
 
 Decky runs plugin backends with its own PyInstaller-built Python, which sets
 LD_LIBRARY_PATH to its bundled libraries. Passed on, that breaks system

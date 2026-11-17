@@ -1,4 +1,4 @@
-# EmuDecky
+# Emu Hub
 
 Install, update and set up emulators on the Steam Deck without leaving Game
 Mode. A light EmuDeck, as a [Decky Loader](https://decky.xyz) plugin.
@@ -16,10 +16,10 @@ Mode. A light EmuDeck, as a [Decky Loader](https://decky.xyz) plugin.
 - **In your Steam library**: every installed emulator gets a shortcut, so it
   starts from Game Mode.
 - **BIOS check**: which consoles still need system files and where they go.
-  EmuDecky never downloads BIOS files, firmware or keys.
+  Emu Hub never downloads BIOS files, firmware or keys.
 
-Games go in `~/EmuDecky/roms/<console>` (or your existing EmuDeck `Emulation`
-folder). [ROM-Store](https://github.com/lauridskern/decky-rom-store) uses the
+Games go in `~/Emulation/roms/<console>`, EmuDeck's layout (an existing EmuDeck
+library on the SD card is used if there is one). [ROM-Store](https://github.com/lauridskern/decky-rom-store) uses the
 same folders.
 
 ## Install
@@ -27,7 +27,7 @@ same folders.
 Decky → Settings → Developer → **Install plugin from URL**:
 
 ```
-https://github.com/lauridskern/emudecky/releases/latest/download/EmuDecky.zip
+https://github.com/lauridskern/decky-emu-hub/releases/latest/download/Emu-Hub.zip
 ```
 
 ## Status

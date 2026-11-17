@@ -1,4 +1,4 @@
-"""EmuDecky - Decky plugin backend.
+"""Emu Hub - Decky plugin backend.
 
 Installs, updates and sets up emulators from Game Mode: AppImages from the
 projects' own releases into ~/Applications, Flathub apps with
@@ -46,8 +46,8 @@ def _env(name: str, fallback: str) -> str:
 
 
 HOME = _env("DECKY_USER_HOME", os.path.expanduser("~"))
-SETTINGS_DIR = _env("DECKY_PLUGIN_SETTINGS_DIR", os.path.join(HOME, "homebrew", "settings", "emudecky"))
-RUNTIME_DIR = _env("DECKY_PLUGIN_RUNTIME_DIR", os.path.join(HOME, "homebrew", "data", "emudecky"))
+SETTINGS_DIR = _env("DECKY_PLUGIN_SETTINGS_DIR", os.path.join(HOME, "homebrew", "settings", "emu-hub"))
+RUNTIME_DIR = _env("DECKY_PLUGIN_RUNTIME_DIR", os.path.join(HOME, "homebrew", "data", "emu-hub"))
 
 
 class Plugin:
@@ -58,7 +58,7 @@ class Plugin:
 
     def __init__(self) -> None:
         emit = getattr(decky, "emit", None) if decky is not None else None
-        self.service = Service(Settings(os.path.join(SETTINGS_DIR, "emudecky.json")), RUNTIME_DIR, HOME, emit)
+        self.service = Service(Settings(os.path.join(SETTINGS_DIR, "emu-hub.json")), RUNTIME_DIR, HOME, emit)
         Plugin._instance = self
 
     @classmethod
@@ -74,11 +74,11 @@ class Plugin:
     async def _main(self) -> None:
         service = self._svc()
         await service.start()
-        _log(f"EmuDecky started; home {HOME}, library {service.root()}")
+        _log(f"Emu Hub started; home {HOME}, library {service.root()}")
 
     async def _unload(self) -> None:
         await self._svc().stop()
-        _log("EmuDecky stopped")
+        _log("Emu Hub stopped")
 
     async def _uninstall(self) -> None:
         pass

@@ -22,7 +22,7 @@ import urllib.error
 import urllib.request
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-USER_AGENT = "EmuDecky (Decky plugin)"
+USER_AGENT = "Emu Hub (Decky plugin)"
 TTL = 3600.0
 TIMEOUT = 20
 
@@ -183,7 +183,7 @@ def compare_versions(a: str, b: str) -> int:
 def is_update(installed: Optional[Dict[str, Any]], newest: Dict[str, Any]) -> bool:
     """True when `newest` should replace what is installed.
 
-    A file with an unknown version (found, not installed by EmuDecky) is not
+    A file with an unknown version (found, not installed by Emu Hub) is not
     an update by itself; the UI offers to replace it. A different key is an
     update unless both versions read as numbers and the new one is older.
     """

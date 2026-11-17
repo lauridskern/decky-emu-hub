@@ -1,13 +1,14 @@
 """The game library: where it is, and its console folders.
 
 A library root holds `roms/<console>/`, `bios/` and `saves/`, the layout
-EmuDeck uses (`~/Emulation`) and ROM-Store downloads into. EmuDecky's own
-default is `~/EmuDecky`; an existing EmuDeck library (in the home folder or
-on an SD card) is preferred, so both tools keep using one set of folders.
+EmuDeck uses (`~/Emulation`) and ROM-Store downloads into. The default is
+`~/Emulation`; an existing EmuDeck library (in the home folder or on an SD
+card) comes first, then an existing `EmuDecky` folder (ROM-Store's older
+default), so every tool keeps using one set of folders.
 
 Console folder names are the ones ROM-Store uses (its backend/systems.py,
 `SYSTEMS[key][1]`), so a game ROM-Store downloads lands where the emulator
-EmuDecky set up looks for it. Keep the two lists in step.
+Emu Hub set up looks for it. Keep the two lists in step.
 """
 
 from __future__ import annotations
@@ -64,7 +65,8 @@ def candidates(home: str, media_glob: str = "/run/media/*/*") -> List[Dict[str, 
     """Possible library roots, in order of preference.
 
     An EmuDeck library that already has a roms folder comes first (internal,
-    then SD cards), then EmuDecky folders, then the default ~/EmuDecky.
+    then SD cards), then existing EmuDecky folders, then the default
+    ~/Emulation.
     """
     mounts = sorted(glob.glob(media_glob))
     found: List[Dict[str, str]] = []
@@ -81,7 +83,7 @@ def candidates(home: str, media_glob: str = "/run/media/*/*") -> List[Dict[str, 
         path = os.path.join(base, "EmuDecky")
         if os.path.isdir(path):
             add(path, "emudecky", where)
-    add(os.path.join(home, "EmuDecky"), "emudecky", "internal")
+    add(os.path.join(home, "Emulation"), "emudeck", "internal")
     return found
 
 
