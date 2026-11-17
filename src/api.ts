@@ -160,3 +160,29 @@ export const chooseEmulator = callable<
   [console: string, key: string],
   { ok: boolean; changed?: boolean; error?: string; choices: EmulatorChoices }
 >("choose_emulator");
+
+export interface LaunchRow {
+  emu_id: string;
+  name: string;
+  consoles: string[];
+  launchers: string[];
+  installed: boolean;
+  /** emudeck: EmuDeck's tools/launchers script · emuhub: Emu Hub's · other */
+  kind: "emudeck" | "emuhub" | "other";
+  ok: boolean;
+  problems: string[];
+}
+
+export interface LaunchCheck {
+  srm: string | null;
+  error?: string;
+  emudeck_backend?: boolean;
+  emulators: LaunchRow[];
+  failures?: string[];
+}
+
+export const launchCheck = callable<[], LaunchCheck>("launch_check");
+export const switchLaunchers = callable<
+  [emuhub: boolean],
+  { ok: boolean; changed?: number; error?: string; check: LaunchCheck }
+>("use_launchers");

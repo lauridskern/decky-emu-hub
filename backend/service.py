@@ -434,6 +434,21 @@ class Service:
         result["choices"] = await self.emulator_choices()
         return result
 
+    async def launch_check(self) -> Dict[str, Any]:
+        """Which launcher each emulator's Steam games start, and whether it can work."""
+        return await asyncio.to_thread(lambda: srm.launch_check(self.home, self._installed_ids()))
+
+    async def use_launchers(self, emuhub: bool) -> Dict[str, Any]:
+        """Point SRM's parsers at Emu Hub's launchers, or back at the old ones."""
+        backups = os.path.join(self.runtime, "backups", "srm")
+        state = os.path.join(self.runtime, "launchers.json")
+        if emuhub:
+            result = await asyncio.to_thread(srm.use_emuhub_launchers, self.home, backups, state)
+        else:
+            result = await asyncio.to_thread(srm.use_original_launchers, self.home, backups, state)
+        result["check"] = await self.launch_check()
+        return result
+
     def _auto_choose(self) -> None:
         """A console whose games would start an emulator that is gone gets an
         installed one (srm.auto_choose); the frontend tells ROM-Store."""

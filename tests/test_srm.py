@@ -146,3 +146,90 @@ class SrmTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class LauncherTest(unittest.TestCase):
+    """Emu Hub's own launchers (backend/launchers.py) and the switch in SRM."""
+
+    def setUp(self):
+        self.home = tempfile.mkdtemp()
+        folder = os.path.join(self.home, ".config", "steam-rom-manager", "userData")
+        os.makedirs(folder)
+        self.path = os.path.join(folder, "userConfigurations.json")
+        launchers_dir = os.path.join(self.home, "Emulation", "tools", "launchers")
+        os.makedirs(launchers_dir)
+        for name in ("eden.sh", "ryujinx.sh"):
+            with open(os.path.join(launchers_dir, name), "w") as handle:
+                handle.write("#!/bin/bash\n")
+        with open(self.path, "w") as handle:
+            json.dump([
+                parser("Nintendo Switch - Eden", f"{launchers_dir}/eden.sh", "switch",
+                       args='vblank_mode=0 %command% -f -g "${filePath}"'),
+                parser("Nintendo Switch - Ryujinx", f"{launchers_dir}/ryujinx.sh", "switch", disabled=True),
+                parser("Sony PlayStation Portable - PPSSPP", f"{launchers_dir}/ppsspp.sh", "psp"),
+                parser("SNES - RetroArch", "${retroarchpath}", "snes"),
+            ], handle, indent=4)
+        self.runtime = os.path.join(self.home, "runtime")
+        self.state = os.path.join(self.runtime, "launchers.json")
+        self.backups = os.path.join(self.runtime, "backups", "srm")
+
+    def parsers(self):
+        with open(self.path) as handle:
+            return {p["configTitle"]: p for p in json.load(handle)}
+
+    def test_check_names_the_problems(self):
+        installed = {"eden": {"method": "appimage"}}
+        check = {row["emu_id"]: row for row in srm.launch_check(self.home, installed)["emulators"]}
+        self.assertNotIn("retroarch", check)
+        self.assertNotIn("ryubing", check)  # its parser is off
+        eden = check["eden"]
+        self.assertEqual(eden["kind"], "emudeck")
+        self.assertFalse(eden["ok"])
+        self.assertIn("EmuDeck's files", eden["problems"][0])   # no ~/.config/EmuDeck here
+        self.assertTrue(any("ppsspp.sh does not exist" in p for p in check["ppsspp"]["problems"]))
+
+    def test_switch_to_emu_hub_and_back(self):
+        result = srm.use_emuhub_launchers(self.home, self.backups, self.state)
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["changed"], 3)                   # not RetroArch
+        parsers = self.parsers()
+        eden = parsers["Nintendo Switch - Eden"]["executable"]["path"]
+        self.assertEqual(eden, os.path.join(self.home, ".local/share/emu-hub/launchers/eden.sh"))
+        self.assertEqual(parsers["Nintendo Switch - Eden"]["executableArgs"], 'vblank_mode=0 %command% -f -g "${filePath}"')
+        self.assertEqual(parsers["SNES - RetroArch"]["executable"]["path"], "${retroarchpath}")
+        self.assertTrue(os.access(eden, os.X_OK))
+        # Still recognised as Eden for "Which emulator opens games".
+        self.assertEqual(srm.emulator_of(parsers["Nintendo Switch - Eden"])[1], "eden")
+        check = {row["emu_id"]: row for row in srm.launch_check(self.home, {"eden": {}})["emulators"]}
+        self.assertTrue(check["eden"]["ok"])
+        self.assertEqual(check["eden"]["kind"], "emuhub")
+        self.assertEqual(srm.use_emuhub_launchers(self.home, self.backups, self.state)["changed"], 0)
+        back = srm.use_original_launchers(self.home, self.backups, self.state)
+        self.assertEqual(back["changed"], 3)
+        self.assertTrue(self.parsers()["Nintendo Switch - Eden"]["executable"]["path"].endswith("tools/launchers/eden.sh"))
+
+    def test_launcher_script_starts_the_appimage_with_the_arguments(self):
+        import subprocess
+        from backend import launchers
+        apps = os.path.join(self.home, "Applications")
+        os.makedirs(apps)
+        out = os.path.join(self.home, "args.txt")
+        fake = os.path.join(apps, "Eden.AppImage")
+        with open(fake, "w") as handle:
+            handle.write(f'#!/bin/sh\nprintf "%s|" "$@" > "{out}"\n')
+        os.chmod(fake, 0o755)
+        script = launchers.write(self.home, "eden")
+        env = dict(os.environ, HOME=self.home)
+        subprocess.run([script, "-f", "-g", "/roms/switch/Super Mario Bros. Wonder.nsp"], env=env, check=True, timeout=10)
+        with open(out) as handle:
+            self.assertEqual(handle.read(), "-f|-g|/roms/switch/Super Mario Bros. Wonder.nsp|")
+        # Another name in ~/Applications (an EmuDeck or hand install) is found too.
+        os.rename(fake, os.path.join(apps, "eden-nightly.AppImage"))
+        os.remove(out)
+        subprocess.run([script, "x"], env=env, check=True, timeout=10)
+        self.assertTrue(os.path.isfile(out))
+        # Nothing installed: fails, and says so in launch.log.
+        os.remove(os.path.join(apps, "eden-nightly.AppImage"))
+        env["PATH"] = "/usr/bin:/bin"
+        self.assertNotEqual(subprocess.run([script], env=env, timeout=10).returncode, 0)
+        self.assertIn("Eden is not installed", launchers.last_failures(self.home)[-1])

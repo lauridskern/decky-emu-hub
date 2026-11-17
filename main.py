@@ -127,6 +127,12 @@ class Plugin:
     async def choose_emulator(self, console: str, key: str) -> Dict[str, Any]:
         return await self._svc().choose_emulator(console, key)
 
+    async def launch_check(self) -> Dict[str, Any]:
+        return await self._svc().launch_check()
+
+    async def use_launchers(self, emuhub: bool = True) -> Dict[str, Any]:
+        return await self._svc().use_launchers(bool(emuhub))
+
     # --------------------------------------------------------------- library
     async def get_library(self) -> Dict[str, Any]:
         return await self._svc().library_info()

@@ -104,6 +104,7 @@ export const CSS = `
 }
 .ed-chip.update { background: rgba(61, 155, 255, 0.2); color: #9ccbff; }
 .ed-chip.ok { background: rgba(106, 211, 122, 0.16); color: #9fe3a9; }
+.ed-warn-text { color: #f6d48c; }
 .ed-chip.warn { background: rgba(243, 189, 85, 0.16); color: #f6d48c; }
 .ed-chip.bad { background: rgba(255, 125, 107, 0.18); color: #ffab9d; }
 

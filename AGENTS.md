@@ -313,6 +313,36 @@ before Ryujinx's, both on.
   manages. Keep the name in step with ROM-Store's `src/index.tsx`.
 - `npm run choice` (preview): the section and the event.
 
+### Starting games from Steam (Emu Hub's launchers)
+
+EmuDeck's `tools/launchers/<name>.sh` scripts `git pull` and source
+`~/.config/EmuDeck/backend` before looking for the emulator, and some only
+look in EmuDeck's old places (`ryujinx.sh`: `~/Applications/publish/`). With
+EmuDeck's files missing, or an emulator Emu Hub installed, a game started
+from Steam closes at once while the emulator itself starts fine (reported on
+a Deck with Eden, Nov 2026).
+
+- `srm.launch_check` (Library & BIOS → "Starting games from Steam") lists,
+  per emulator with an enabled parser, the launcher its games start and why
+  it cannot work: the file is missing, EmuDeck's backend is missing,
+  `ryujinx.sh` with an AppImage install, the emulator is not installed.
+- "Start games through Emu Hub" (`srm.use_emuhub_launchers`) writes
+  `~/.local/share/emu-hub/launchers/<emu id>.sh` (`backend/launchers.py`)
+  and points those parsers' `executable.path` at them; arguments are left
+  as they are (the script passes `"$@"` through, so `%command%` launch
+  options keep working). The old paths are kept in `launchers.json` and
+  "Use the previous launchers" puts them back; `backups/srm/` has the file.
+  RetroArch's parsers (`${retroarchpath}`) are never changed.
+- The script tries `~/Applications/<file>`, `detect_paths`, any
+  `~/Applications/<name>*.AppImage`, then `flatpak run` for the catalogue's
+  Flathub ids, and logs a failed start to `launch.log` (shown in the
+  section). `tests/test_srm.py` runs a generated script against a fake
+  AppImage.
+- The launcher's file name is the Emu Hub id, which `srm.LAUNCHERS` maps
+  back, so "Which emulator opens games" still recognises switched parsers.
+- Afterwards the frontend sends `emuhub:emulator-choice` (console "all") and
+  ROM-Store re-points its shortcuts.
+
 ### UI structure
 
 A route (`/emu-hub`) with four tabs (Emulators, Updates, Library & BIOS,

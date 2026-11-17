@@ -213,6 +213,23 @@ let choices: any = {
   ],
 };
 (handlers as any).emulator_choices = () => choices;
+// Starting games from Steam: EmuDeck's launchers without EmuDeck's files.
+let launch: any = {
+  srm: choices.srm, emudeck_backend: false, failures: [],
+  emulators: [
+    { emu_id: "eden", name: "Eden", consoles: ["switch"], launchers: ["/home/deck/Emulation/tools/launchers/eden.sh"], installed: true,
+      kind: "emudeck", ok: false, problems: ["EmuDeck's launcher needs EmuDeck's files (~/.config/EmuDeck), which are not there"] },
+    { emu_id: "ppsspp", name: "PPSSPP", consoles: ["psp"], launchers: ["/home/deck/Emulation/tools/launchers/ppsspp.sh"], installed: true,
+      kind: "emudeck", ok: false, problems: ["EmuDeck's launcher needs EmuDeck's files (~/.config/EmuDeck), which are not there"] },
+    { emu_id: "duckstation", name: "DuckStation", consoles: ["psx"], launchers: ["/home/deck/Emulation/tools/launchers/duckstation.sh"], installed: true,
+      kind: "emudeck", ok: true, problems: [] },
+  ],
+};
+(handlers as any).launch_check = () => launch;
+(handlers as any).use_launchers = (emuhub: boolean) => {
+  launch = { ...launch, emulators: launch.emulators.map((r: any) => ({ ...r, kind: emuhub ? "emuhub" : "emudeck", ok: emuhub, problems: emuhub ? [] : r.problems })) };
+  return { ok: true, changed: 3, check: launch };
+};
 (handlers as any).choose_emulator = (console: string, key: string) => {
   const group = choices.consoles.find((c: any) => c.console === console);
   const changed = group.current !== key;

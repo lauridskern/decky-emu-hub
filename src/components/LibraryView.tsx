@@ -4,6 +4,7 @@ import { Button, Focusable } from "@decky/ui";
 import { createFolders, getLibrary, LibraryInfo, setLibraryRoot } from "../api";
 import { refresh } from "../state";
 import EmulatorChoice from "./EmulatorChoice";
+import LaunchCheck from "./LaunchCheck";
 import { Glyph, Spinner, tilde } from "./ui";
 
 /**
@@ -101,6 +102,7 @@ const LibraryView: FC = () => {
       </section>
 
       <EmulatorChoice />
+      <LaunchCheck />
 
       <section className="ed-section">
         <div className="ed-section-title">BIOS and system files</div>

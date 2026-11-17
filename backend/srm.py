@@ -256,3 +256,169 @@ def auto_choose(home: str, installed: Dict[str, Any], backup_dir: str) -> List[D
         if result.get("ok") and result.get("changed"):
             done.append({"console": group["console"], "from": current["label"], "to": alternative["label"]})
     return done
+
+
+# ------------------------------------------------------------ launching games
+
+EMUDECK_BACKEND = ".config/EmuDeck/backend/functions/all.sh"
+
+
+def _write_parsers(path: str, raw: str, parsers: List[Any], backup_dir: str) -> str:
+    saved = _backup(path, backup_dir)
+    indent = 4 if raw.startswith("[\n    ") else 2
+    tmp = f"{path}.emu-hub-tmp"
+    with open(tmp, "w", encoding="utf-8") as handle:
+        json.dump(parsers, handle, indent=indent, ensure_ascii=False)
+        handle.write("\n")
+    os.replace(tmp, path)
+    return saved
+
+
+def _read_raw(path: str) -> Tuple[str, List[Any]]:
+    with open(path, "r", encoding="utf-8") as handle:
+        raw = handle.read()
+    parsers = json.loads(raw)
+    if not isinstance(parsers, list):
+        raise ValueError("not a list of parsers")
+    return raw, parsers
+
+
+def launch_check(home: str, installed: Dict[str, Any]) -> Dict[str, Any]:
+    """Per emulator: which launcher its games' Steam shortcuts start, and
+    whether that can work. Only enabled parsers of emulators Emu Hub knows
+    (RetroArch's parsers start RetroArch itself and are left out)."""
+    from . import launchers
+
+    path = find_config(home)
+    if not path:
+        return {"srm": None, "emulators": []}
+    try:
+        _, parsers = _read_raw(path)
+    except (OSError, ValueError) as error:
+        return {"srm": path, "error": f"{os.path.basename(path)} could not be read ({error})", "emulators": []}
+    backend = os.path.isfile(os.path.join(home, EMUDECK_BACKEND))
+    rows: Dict[str, Dict[str, Any]] = {}
+    for parser in parsers:
+        if not isinstance(parser, dict) or parser.get("disabled"):
+            continue
+        console = console_of(parser)
+        key, emu_id, label = emulator_of(parser)
+        if not console or not emu_id or emu_id == "retroarch":
+            continue
+        exe = str((parser.get("executable") or {}).get("path") or "")
+        row = rows.setdefault(emu_id, {"emu_id": emu_id, "name": label, "consoles": [], "launchers": [],
+                                       "installed": emu_id in installed})
+        if console not in row["consoles"]:
+            row["consoles"].append(console)
+        if exe not in row["launchers"]:
+            row["launchers"].append(exe)
+    out = []
+    for emu_id, row in rows.items():
+        mine = launchers.path_for(home, emu_id)
+        problems = []
+        kind = "emuhub"
+        for exe in row["launchers"]:
+            if exe == mine:
+                if not os.path.isfile(exe):
+                    problems.append("Emu Hub's launcher is missing; switch again to write it")
+                continue
+            kind = "emudeck" if "/tools/launchers/" in exe else "other"
+            if "${" in exe:
+                continue  # SRM fills it in; nothing to check here
+            if not os.path.isfile(exe):
+                problems.append(f"{os.path.basename(exe) or exe} does not exist")
+            elif kind == "emudeck" and not backend:
+                problems.append("EmuDeck's launcher needs EmuDeck's files (~/.config/EmuDeck), which are not there")
+            elif kind == "emudeck" and emu_id == "ryubing" and installed.get("ryubing", {}).get("method") == "appimage" \
+                    and not os.path.exists(os.path.join(home, "Applications", "publish")):
+                problems.append("EmuDeck's ryujinx.sh only looks in ~/Applications/publish and does not find the AppImage")
+        if not row["installed"]:
+            problems.append(f"{row['name']} is not installed")
+        row.update({"kind": kind, "ok": not problems, "problems": problems})
+        out.append(row)
+    out.sort(key=lambda r: (r["ok"], r["name"].lower()))
+    return {"srm": path, "emudeck_backend": backend, "emulators": out,
+            "failures": launchers.last_failures(home)}
+
+
+def use_emuhub_launchers(home: str, backup_dir: str, state_path: str, only: Optional[List[str]] = None) -> Dict[str, Any]:
+    """Point the parsers of every emulator Emu Hub knows (or `only`) at Emu
+    Hub's launchers. The launchers they used are remembered in `state_path`,
+    so `use_original_launchers` can put them back."""
+    from . import launchers
+
+    path = find_config(home)
+    if not path:
+        return {"ok": False, "error": "Steam ROM Manager's settings were not found."}
+    try:
+        raw, parsers = _read_raw(path)
+    except (OSError, ValueError) as error:
+        return {"ok": False, "error": f"{os.path.basename(path)} could not be read ({error})"}
+    try:
+        with open(state_path, "r", encoding="utf-8") as handle:
+            originals = json.load(handle)
+        if not isinstance(originals, dict):
+            originals = {}
+    except (OSError, ValueError):
+        originals = {}
+    changed = []
+    for parser in parsers:
+        if not isinstance(parser, dict):
+            continue
+        _, emu_id, _ = emulator_of(parser)
+        if not emu_id or emu_id == "retroarch" or (only and emu_id not in only):
+            continue
+        executable = parser.get("executable")
+        if not isinstance(executable, dict):
+            continue
+        target = launchers.write(home, emu_id)
+        if not target or executable.get("path") == target:
+            continue
+        originals.setdefault(str(parser.get("configTitle") or ""), executable.get("path"))
+        executable["path"] = target
+        changed.append(str(parser.get("configTitle") or ""))
+    if not changed:
+        return {"ok": True, "changed": 0, "srm": path}
+    try:
+        saved = _write_parsers(path, raw, parsers, backup_dir)
+        os.makedirs(os.path.dirname(state_path), exist_ok=True)
+        with open(state_path, "w", encoding="utf-8") as handle:
+            json.dump(originals, handle, indent=2)
+    except OSError as error:
+        return {"ok": False, "error": f"Could not write {os.path.basename(path)} ({error})"}
+    return {"ok": True, "changed": len(changed), "parsers": changed, "srm": path, "backup": saved}
+
+
+def use_original_launchers(home: str, backup_dir: str, state_path: str) -> Dict[str, Any]:
+    """Put back the launchers the parsers used before Emu Hub's."""
+    from . import launchers
+
+    path = find_config(home)
+    if not path:
+        return {"ok": False, "error": "Steam ROM Manager's settings were not found."}
+    try:
+        with open(state_path, "r", encoding="utf-8") as handle:
+            originals = json.load(handle)
+        raw, parsers = _read_raw(path)
+    except (OSError, ValueError):
+        return {"ok": True, "changed": 0}
+    changed = 0
+    for parser in parsers:
+        if not isinstance(parser, dict):
+            continue
+        title = str(parser.get("configTitle") or "")
+        executable = parser.get("executable")
+        if title in originals and isinstance(executable, dict) and \
+                str(executable.get("path") or "").startswith(launchers.folder(home)):
+            executable["path"] = originals[title]
+            changed += 1
+    if changed:
+        try:
+            _write_parsers(path, raw, parsers, backup_dir)
+        except OSError as error:
+            return {"ok": False, "error": f"Could not write {os.path.basename(path)} ({error})"}
+    try:
+        os.remove(state_path)
+    except OSError:
+        pass
+    return {"ok": True, "changed": changed}
