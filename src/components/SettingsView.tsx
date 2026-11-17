@@ -3,6 +3,7 @@ import { Button, Dropdown, Focusable, TextField } from "@decky/ui";
 
 import { getSettings, setSettings, Settings } from "../api";
 import { Switch } from "./ui";
+import { BackendError } from "./EmulatorsView";
 
 type Toggle = "auto_presets" | "add_to_steam" | "check_updates";
 
@@ -34,10 +35,15 @@ const SettingsView: FC = () => {
   const [settings, setLocal] = useState<Settings | null>(null);
   const [token, setToken] = useState("");
   const [saved, setSaved] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
-  useEffect(() => {
-    getSettings().then(setLocal).catch(() => undefined);
-  }, []);
+  const load = () => {
+    setLoadError(null);
+    getSettings()
+      .then(setLocal)
+      .catch((error) => setLoadError(String(error)));
+  };
+  useEffect(load, []);
 
   const change = (changes: Partial<Settings> & { github_token?: string }) => {
     if (settings) setLocal({ ...settings, ...changes } as Settings);
@@ -49,7 +55,7 @@ const SettingsView: FC = () => {
       .catch((error) => setSaved(`Not saved: ${error}`));
   };
 
-  if (!settings) return <div className="ed-view" />;
+  if (!settings) return loadError ? <BackendError error={loadError} onRetry={load} /> : <div className="ed-view" />;
 
   return (
     <Focusable noFocusRing className="ed-view" flow-children="column">

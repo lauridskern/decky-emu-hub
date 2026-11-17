@@ -17,7 +17,6 @@ from __future__ import annotations
 
 import json
 import re
-import xml.etree.ElementTree as ET
 from typing import Any, Dict, List, Optional, Tuple
 
 _SECTION = re.compile(r"^\s*\[([^\]]+)\]\s*$")
@@ -150,36 +149,111 @@ def json_get(text: str, key: str) -> Any:
     return data.get(key) if isinstance(data, dict) else None
 
 
+# XML is edited with a small tokenizer instead of xml.etree: Decky Loader's
+# bundled Python has no xml package (checked in PluginLoader v3.3.1), and an
+# import of it stops the whole backend from loading. tests/test_imports.py
+# keeps the backend on modules Decky ships. Only direct children of the root
+# element are read or changed; every other byte of the file stays as it was.
+_XML_TOKEN = re.compile(
+    r"<!--.*?-->|<!\[CDATA\[.*?\]\]>|<\?.*?\?>|<![^>]*>"
+    r"|<(/?)([A-Za-z_][\w.:-]*)(?:\s[^>]*?)?(/?)>",
+    re.S,
+)
+_XML_ESCAPES = (("&", "&amp;"), ("<", "&lt;"), (">", "&gt;"))
+
+
+def _xml_escape(value: str) -> str:
+    for raw, escaped in _XML_ESCAPES:
+        value = value.replace(raw, escaped)
+    return value
+
+
+def _xml_unescape(value: str) -> str:
+    value = value.replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", '"').replace("&apos;", "'")
+    return value.replace("&amp;", "&")
+
+
+def _xml_children(text: str) -> Tuple[Tuple[str, int, int], Dict[str, List[Tuple[int, int, Optional[int], Optional[int]]]]]:
+    """The root element (name, inner start, inner end) and its direct children:
+    tag -> [(start, end, inner start, inner end)], inner None when self-closing."""
+    stack: List[Tuple[str, "re.Match[str]"]] = []
+    children: Dict[str, List[Tuple[int, int, Optional[int], Optional[int]]]] = {}
+    for match in _XML_TOKEN.finditer(text):
+        name = match.group(2)
+        if name is None:
+            continue
+        if match.group(1) == "/":
+            if not stack or stack[-1][0] != name:
+                raise ValueError(f"unbalanced </{name}>")
+            _, opened = stack.pop()
+            if len(stack) == 1:
+                children.setdefault(name, []).append((opened.start(), match.end(), opened.end(), match.start()))
+            elif not stack:
+                return (name, opened.end(), match.start()), children
+        elif match.group(3) == "/":
+            if len(stack) == 1:
+                children.setdefault(name, []).append((match.start(), match.end(), None, None))
+            elif not stack:
+                raise ValueError("empty root element")
+        else:
+            stack.append((name, match))
+    raise ValueError("no root element")
+
+
+def _xml_entries(inner: str) -> List[str]:
+    return [_xml_unescape(v) for v in re.findall(r"<Entry>(.*?)</Entry>", inner, re.S)]
+
+
 def xml_set(text: str, updates: Dict[str, Any], root_tag: str = "content") -> str:
     """Set children of the root element. A list value means one <Entry> per item
     (Cemu's <GamePaths>); entries already there are kept."""
-    root = ET.fromstring(text) if text.strip() else ET.Element(root_tag)
+    if not text.strip():
+        text = f'<?xml version="1.0" encoding="UTF-8"?>\n<{root_tag}>\n</{root_tag}>\n'
     for tag, value in updates.items():
-        child = root.find(tag)
-        if child is None:
-            child = ET.SubElement(root, tag)
+        (_, _, root_end), children = _xml_children(text)
+        found = children.get(tag, [None])[0]
         if isinstance(value, list):
-            have = [e.text for e in child.findall("Entry")]
-            for item in value:
-                if item not in have:
-                    ET.SubElement(child, "Entry").text = item
+            have = _xml_entries(text[found[2]:found[3]]) if found and found[2] is not None else []
+            missing = "".join(f"\t\t<Entry>{_xml_escape(str(v))}</Entry>\n" for v in value if str(v) not in have)
+            if found and found[2] is not None:
+                if missing:
+                    # New entries go before the closing tag's indentation.
+                    inner = text[found[2]:found[3]]
+                    at = found[3] - (len(inner) - len(inner.rstrip(" \t")))
+                    if not text[:at].endswith("\n"):
+                        missing = "\n" + missing
+                    text = text[:at] + missing + text[at:]
+                continue
+            block = f"<{tag}>\n{missing}\t</{tag}>"
         else:
-            child.text = str(value)
-    if hasattr(ET, "indent"):
-        ET.indent(root, space="\t")
-    return '<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(root, encoding="unicode") + "\n"
+            block = f"<{tag}>{_xml_escape(str(value))}</{tag}>"
+            if found and found[2] is not None:
+                text = text[:found[2]] + _xml_escape(str(value)) + text[found[3]:]
+                continue
+        if found:  # self-closing: replace it
+            text = text[:found[0]] + block + text[found[1]:]
+        else:
+            before = text[:root_end]
+            sep = "" if before.endswith("\n") else "\n"
+            text = before + sep + "\t" + block + "\n" + text[root_end:]
+    return text
 
 
 def xml_get(text: str, tag: str) -> Any:
     try:
-        root = ET.fromstring(text)
-    except ET.ParseError:
+        _, children = _xml_children(text)
+    except ValueError:
         return None
-    child = root.find(tag)
-    if child is None:
+    found = children.get(tag)
+    if not found:
         return None
-    entries = child.findall("Entry")
-    return [e.text for e in entries] if entries else (child.text or "")
+    _, _, start, end = found[0]
+    if start is None:
+        return ""
+    inner = text[start:end]
+    if "<Entry>" in inner:
+        return _xml_entries(inner)
+    return "" if "<" in inner else _xml_unescape(inner)
 
 
 def yaml_scalar(value: Any) -> str:

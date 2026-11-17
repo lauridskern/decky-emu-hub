@@ -60,6 +60,26 @@ class FormatTest(unittest.TestCase):
         self.assertEqual(out["game_dirs"], ["/mine", "/lib/switch"])
         self.assertTrue(out["start_fullscreen"])
 
+    def test_xml_keeps_the_rest_of_the_file(self):
+        text = (
+            '<?xml version="1.0" encoding="UTF-8"?>\n<content>\n\t<logflag>0</logflag>\n'
+            "\t<fullscreen>false</fullscreen>\n\t<!-- <fullscreen>x</fullscreen> -->\n"
+            "\t<Graphic>\n\t\t<fullscreen>nested</fullscreen>\n\t</Graphic>\n"
+            "\t<GamePaths>\n\t\t<Entry>/a &amp; b</Entry>\n\t</GamePaths>\n\t<check_update/>\n</content>\n"
+        )
+        out = configfmt.xml_set(text, {"fullscreen": "true", "check_update": "false", "GamePaths": ["/a & b", "/x"]})
+        self.assertIn("\t\t<fullscreen>nested</fullscreen>", out)          # only direct children change
+        self.assertIn("<!-- <fullscreen>x</fullscreen> -->", out)            # comments untouched
+        self.assertIn("\t<logflag>0</logflag>\n", out)
+        self.assertIn("\t\t<Entry>/a &amp; b</Entry>\n\t\t<Entry>/x</Entry>\n\t</GamePaths>", out)
+        self.assertEqual(configfmt.xml_get(out, "fullscreen"), "true")
+        self.assertEqual(configfmt.xml_get(out, "check_update"), "false")
+        self.assertEqual(configfmt.xml_get(out, "GamePaths"), ["/a & b", "/x"])
+        self.assertEqual(configfmt.xml_set(out, {"fullscreen": "true", "GamePaths": ["/x"]}), out)  # idempotent
+        self.assertIsNone(configfmt.xml_get("<content><broken>", "x"))
+        with self.assertRaises(ValueError):
+            configfmt.xml_set("<content><broken>", {"x": "1"})
+
     def test_xml(self):
         text = "<?xml version='1.0'?>\n<content>\n<mlc_path></mlc_path>\n<fullscreen>false</fullscreen>\n<GamePaths><Entry>/a</Entry></GamePaths>\n</content>\n"
         out = configfmt.xml_set(text, {"fullscreen": "true", "check_update": "false", "GamePaths": ["/b"]})

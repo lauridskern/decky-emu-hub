@@ -6,7 +6,8 @@
   "scripts": {
     "build": "node build.mjs",
     "shots": "node build.mjs && node shoot.mjs",
-    "dev": "node dev.mjs"
+    "dev": "node dev.mjs",
+    "down": "node build.mjs && node down.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",

@@ -1,15 +1,33 @@
-import { FC, useState } from "react";
+import { FC, useState, useSyncExternalStore } from "react";
 import { Button, Focusable } from "@decky/ui";
 
 import { createFolders, State } from "../api";
-import { refresh } from "../state";
+import { lastError, refresh, subscribe } from "../state";
 import EmulatorCard from "./EmulatorCard";
 import { Spinner } from "./ui";
+
+/** The backend did not answer: say so instead of waiting forever. */
+export const BackendError: FC<{ error: string; onRetry: () => void }> = ({ error, onRetry }) => (
+  <Focusable noFocusRing className="ed-view" flow-children="column">
+    <Focusable noFocusRing className="ed-banner warn" flow-children="row">
+      <span style={{ flex: "1 1 auto" }}>
+        Emu Hub's backend did not answer ({error.replace(/^Error:\s*/, "")}). Restarting the plugin from Decky's settings
+        usually helps; the log is in ~/homebrew/logs/emu-hub/.
+      </span>
+      <Button className="ed-btn" noFocusRing onClick={onRetry}>
+        Retry
+      </Button>
+    </Focusable>
+  </Focusable>
+);
 
 /** Every emulator, installed ones first. */
 const EmulatorsView: FC<{ state: State | null; onMore: (id: string) => void }> = ({ state, onMore }) => {
   const [making, setMaking] = useState(false);
+  // The state stays null when the backend fails, so watch the error itself.
+  const error = useSyncExternalStore(subscribe, lastError, lastError);
   if (!state) {
+    if (error) return <BackendError error={error} onRetry={() => refresh()} />;
     return (
       <div className="ed-view">
         <div className="ed-banner">

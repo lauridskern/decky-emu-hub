@@ -200,6 +200,10 @@ const handlers: Record<string, (...args: any[]) => any> = {
 export const callable =
   <Args extends any[] = [], Return = void>(route: string) =>
   async (...args: Args): Promise<Return> => {
+    // ?down: a backend that never loaded (every call fails), see BackendError.
+    if (typeof location !== "undefined" && new URLSearchParams(location.search).has("down")) {
+      throw new Error("Plugin Emu-Hub is not loaded");
+    }
     const handler = handlers[route];
     if (!handler) throw new Error(`No mock for ${route}`);
     return (await handler(...args)) as Return;

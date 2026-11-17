@@ -303,6 +303,28 @@ the card that opened it.
 | library | A uses that folder · BIOS rows only scroll |
 | settings | A flips a switch; the token is saved with its button |
 
+
+### Decky's Python has only some of the standard library
+
+Decky Loader runs plugin backends with the Python frozen into its
+PluginLoader binary (PyInstaller, Python 3.14 in v3.3.1). It contains only
+the standard-library modules Decky itself pulls in. **`xml.etree` is not
+there** (`xml.sax`, `xml.parsers.expat` are). One `import` of a missing
+module stops the whole backend from loading, and every call from the UI then
+fails. That is what v0.1.1 of Emu Hub did: the page sat on "Looking at what
+is installed…" and Settings stayed empty, because `configfmt.py` imported
+`xml.etree` for Cemu's settings.xml.
+
+- `tests/test_imports.py` checks every import in `main.py` and `backend/`
+  against `tests/decky_modules.txt`, the module list read out of
+  PluginLoader v3.3.1 (PYZ, base_library.zip, lib-dynload, bootstrap).
+  It runs with the other unit tests in CI and before a release.
+- After a Decky Loader update, regenerate the list: download `PluginLoader`
+  from the decky-loader release, `pip install pyinstaller` in a venv, read
+  the archive with `PyInstaller.archive.readers.CArchiveReader` (the PYZ and
+  `base_library.zip` entries, plus the `lib-dynload/*.so` names).
+- XML is edited by a small tokenizer in `configfmt.py`; keep it that way.
+
 ## 10. Hard-won constraints (inherited from ROM-Store) — do not regress
 
 - Only `TextField`, `Dropdown`, `Button`, `Focusable` from `@decky/ui` inside
