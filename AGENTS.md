@@ -282,6 +282,37 @@ flatpak id, report the app id to the backend (`shortcuts.json`, with
 `made`), remove only shortcuts Emu Hub made. Launch = `RunGame` with the
 shortcut's 64-bit game id. Flatpak shortcuts run `/usr/bin/flatpak run <id>`.
 
+### Which emulator opens a console's games
+
+Game shortcuts (made by Steam ROM Manager, or by ROM-Store from SRM's
+parsers) start whatever the **first enabled parser** for the ROM folder
+names: EmuDeck's `Emulation/tools/launchers/<name>.sh` (which finds
+`~/Applications/<name>*.AppImage`, else a flatpak), RetroArch with a core,
+or `flatpak run <id>`. EmuDeck's default setup has Eden's Switch parser
+before Ryujinx's, both on.
+
+- `backend/srm.py` finds `userConfigurations.json` in **the same places, in
+  the same order, as ROM-Store's `backend/steam.py` `SRM_DIRS`** (a test
+  checks this when ROM-Store is checked out next to this repo), groups the
+  parsers by ROM folder (`${romsdirglobal}/<folder>`) and by emulator
+  (`LAUNCHERS`: launcher script name → Emu Hub id; RetroArch by
+  `${retroarchpath}`; `flatpak run <id>` by the catalogue's flatpak ids;
+  anything else is "other", never judged). Only folders with two or more
+  emulators are offered.
+- Choosing one (Library & BIOS → "Which emulator opens games") enables that
+  emulator's parsers and disables the other emulators' parsers for that
+  folder, like EmuDeck's own choice. If one of the chosen emulator's
+  parsers is already on (a RetroArch core the user picked), their states
+  are kept. The file is copied to `backups/srm/` first (last 10), and
+  nothing else in it changes.
+- `auto_choose` (after a job finishes, and 20 s after start): a folder whose
+  current emulator is a known one that is not installed moves to an
+  installed one. A working choice, or an unknown launcher, is never touched.
+- The frontend then dispatches `emuhub:emulator-choice` on `window`
+  (`src/choice.ts`); ROM-Store listens and re-points the shortcuts it
+  manages. Keep the name in step with ROM-Store's `src/index.tsx`.
+- `npm run choice` (preview): the section and the event.
+
 ### UI structure
 
 A route (`/emu-hub`) with four tabs (Emulators, Updates, Library & BIOS,
@@ -300,7 +331,7 @@ the card that opened it.
 | emulator card | A install / update / launch · X actions sheet |
 | actions sheet | A runs the item · uninstall asks first, Keep focused · B closes |
 | updates | A update (or Get x.y for unknown versions) · X actions sheet |
-| library | A uses that folder · BIOS rows only scroll |
+| library | A uses that folder · A on an emulator under "Which emulator opens games" picks it · BIOS rows only scroll |
 | settings | A flips a switch; the token is saved with its button |
 
 

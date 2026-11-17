@@ -198,6 +198,29 @@ const handlers: Record<string, (...args: any[]) => any> = {
   },
 };
 
+// Steam ROM Manager's parsers: Switch has two emulators (EmuDeck's default).
+let choices: any = {
+  srm: "/home/deck/.config/steam-rom-manager/userData/userConfigurations.json",
+  consoles: [
+    { console: "switch", label: "Switch", current: "eden", options: [
+      { key: "eden", emu_id: "eden", label: "Eden", parsers: ["Nintendo Switch - Eden"], enabled: true, installed: false },
+      { key: "ryubing", emu_id: "ryubing", label: "Ryubing", parsers: ["Nintendo Switch - Ryujinx"], enabled: true, installed: true },
+    ] },
+    { console: "psx", label: "PlayStation", current: "duckstation", options: [
+      { key: "duckstation", emu_id: "duckstation", label: "DuckStation", parsers: ["Sony PlayStation - DuckStation"], enabled: true, installed: true },
+      { key: "retroarch", emu_id: "retroarch", label: "RetroArch", parsers: ["Sony PlayStation - RetroArch Beetle PSX HW"], enabled: false, installed: true },
+    ] },
+  ],
+};
+(handlers as any).emulator_choices = () => choices;
+(handlers as any).choose_emulator = (console: string, key: string) => {
+  const group = choices.consoles.find((c: any) => c.console === console);
+  const changed = group.current !== key;
+  group.current = key;
+  choices = { ...choices };
+  return { ok: true, changed, choices };
+};
+
 export const callable =
   <Args extends any[] = [], Return = void>(route: string) =>
   async (...args: Args): Promise<Return> => {

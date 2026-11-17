@@ -9,6 +9,7 @@ import { checkUpdates } from "./api";
 import { onJobDone } from "./actions";
 import { refresh, setState, snapshot, subscribe } from "./state";
 import { ago } from "./components/ui";
+import { announceChoice } from "./choice";
 
 const ROUTE = "/emu-hub";
 
@@ -88,6 +89,17 @@ const onNotice = (title: string, body: string) => {
   toaster.toast({ title, body });
 };
 
+/** The backend moved a console to an installed emulator (backend/srm.py auto_choose). */
+const onChoice = (event: { auto: boolean; changes: { console: string; from: string; to: string }[] }) => {
+  for (const change of event?.changes ?? []) {
+    announceChoice({ console: change.console, emulator: change.to, auto: true });
+    toaster.toast({
+      title: `${change.to} now opens ${change.console} games`,
+      body: `${change.from} is not installed. ROM-Store updates your Steam shortcuts.`,
+    });
+  }
+};
+
 const onJob = (event: Parameters<typeof onJobDone>[0]) => {
   onJobDone(event).catch(() => undefined);
 };
@@ -96,6 +108,7 @@ export default definePlugin(() => {
   addEventListener("emuhub_updates", onUpdates);
   addEventListener("emuhub_notice", onNotice);
   addEventListener("emuhub_job", onJob);
+  addEventListener("emuhub_choice", onChoice);
   routerHook.addRoute(ROUTE, Page, { exact: true });
 
   return {
@@ -107,6 +120,7 @@ export default definePlugin(() => {
       removeEventListener("emuhub_updates", onUpdates);
       removeEventListener("emuhub_notice", onNotice);
       removeEventListener("emuhub_job", onJob);
+      removeEventListener("emuhub_choice", onChoice);
       routerHook.removeRoute(ROUTE);
     },
   };

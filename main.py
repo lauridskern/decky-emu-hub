@@ -120,6 +120,13 @@ class Plugin:
     async def report_shortcut(self, emu_id: str, appid: Optional[int] = None, made: bool = True) -> Dict[str, Any]:
         return await self._svc().report_shortcut(emu_id, appid, made)
 
+    # ------------------------------------------------- which emulator opens …
+    async def emulator_choices(self) -> Dict[str, Any]:
+        return await self._svc().emulator_choices()
+
+    async def choose_emulator(self, console: str, key: str) -> Dict[str, Any]:
+        return await self._svc().choose_emulator(console, key)
+
     # --------------------------------------------------------------- library
     async def get_library(self) -> Dict[str, Any]:
         return await self._svc().library_info()

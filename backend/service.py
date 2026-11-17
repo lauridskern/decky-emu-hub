@@ -19,7 +19,7 @@ import threading
 import time
 from typing import Any, Awaitable, Callable, Dict, List, Optional
 
-from . import bios, catalogue, detect, flatpak, library, presets, releases
+from . import bios, catalogue, detect, flatpak, library, presets, releases, srm
 from .installer import Installer, Job
 from .settings import Settings, load_json, save_json
 
@@ -60,6 +60,7 @@ class Service:
         self.loop = asyncio.get_running_loop()
         os.makedirs(self.runtime, exist_ok=True)
         self.ticker = self.loop.create_task(self._tick())
+        self.loop.create_task(self._auto_choose_later())
 
     async def stop(self) -> None:
         if self.ticker:
@@ -348,6 +349,8 @@ class Service:
                 if not result.get("ok") and result.get("state") == "waiting":
                     self.manifest[job.emu_id]["preset_pending"] = True
                     self._save_manifest()
+        if job.state == "done":
+            self._auto_choose()
         self._emit_threadsafe("emuhub_job", {
             "emu_id": job.emu_id,
             "name": emu["name"],
@@ -408,6 +411,42 @@ class Service:
             self.shortcuts.pop(emu_id, None)
         await asyncio.to_thread(save_json, self.shortcuts_path, self.shortcuts)
         return {"ok": True}
+
+    # ------------------------------------------------- which emulator opens …
+
+    def _installed_ids(self) -> Dict[str, Any]:
+        return detect.detect_all(self.home, self.manifest, self._flatpak_list())
+
+    def _choices(self) -> Dict[str, Any]:
+        result = srm.choices(self.home, self._installed_ids())
+        labels = {folder: label for label, folder in library.CONSOLES.values()}
+        for group in result.get("consoles", []):
+            group["label"] = labels.get(group["console"], group["console"])
+        return result
+
+    async def emulator_choices(self) -> Dict[str, Any]:
+        """Consoles with games more than one emulator could open (SRM parsers)."""
+        return await asyncio.to_thread(self._choices)
+
+    async def choose_emulator(self, console: str, key: str) -> Dict[str, Any]:
+        result = await asyncio.to_thread(srm.choose, self.home, console, key,
+                                         os.path.join(self.runtime, "backups", "srm"))
+        result["choices"] = await self.emulator_choices()
+        return result
+
+    def _auto_choose(self) -> None:
+        """A console whose games would start an emulator that is gone gets an
+        installed one (srm.auto_choose); the frontend tells ROM-Store."""
+        try:
+            done = srm.auto_choose(self.home, self._installed_ids(), os.path.join(self.runtime, "backups", "srm"))
+        except Exception:
+            return
+        if done:
+            self._emit_threadsafe("emuhub_choice", {"auto": True, "changes": done})
+
+    async def _auto_choose_later(self) -> None:
+        await asyncio.sleep(20)
+        await asyncio.to_thread(self._auto_choose)
 
     # ------------------------------------------------------------- library
 

@@ -3,6 +3,7 @@ import { Button, Focusable } from "@decky/ui";
 
 import { createFolders, getLibrary, LibraryInfo, setLibraryRoot } from "../api";
 import { refresh } from "../state";
+import EmulatorChoice from "./EmulatorChoice";
 import { Glyph, Spinner, tilde } from "./ui";
 
 /**
@@ -98,6 +99,8 @@ const LibraryView: FC = () => {
           })}
         </Focusable>
       </section>
+
+      <EmulatorChoice />
 
       <section className="ed-section">
         <div className="ed-section-title">BIOS and system files</div>

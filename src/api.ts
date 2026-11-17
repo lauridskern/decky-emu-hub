@@ -131,3 +131,32 @@ export const getSettings = callable<[], Settings>("get_settings");
 export const setSettings = callable<[changes: Partial<Settings> & { github_token?: string }], Settings>("set_settings");
 
 export const isActive = (job: Job | null | undefined): boolean => job?.state === "queued" || job?.state === "running";
+
+export interface ChoiceOption {
+  key: string;
+  emu_id: string | null;
+  label: string;
+  parsers: string[];
+  enabled: boolean;
+  /** null: a launcher Emu Hub does not know */
+  installed: boolean | null;
+}
+
+export interface ChoiceGroup {
+  console: string;
+  label: string;
+  current: string | null;
+  options: ChoiceOption[];
+}
+
+export interface EmulatorChoices {
+  srm: string | null;
+  error?: string;
+  consoles: ChoiceGroup[];
+}
+
+export const emulatorChoices = callable<[], EmulatorChoices>("emulator_choices");
+export const chooseEmulator = callable<
+  [console: string, key: string],
+  { ok: boolean; changed?: boolean; error?: string; choices: EmulatorChoices }
+>("choose_emulator");
