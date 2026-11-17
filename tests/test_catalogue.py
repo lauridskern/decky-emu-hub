@@ -29,7 +29,7 @@ class CatalogueTest(unittest.TestCase):
 
     def test_required_emulators_present(self):
         for wanted in ("retroarch", "dolphin", "pcsx2", "duckstation", "ppsspp", "cemu", "rpcs3", "azahar",
-                       "melonds", "ryubing", "xemu", "vita3k", "shadps4", "flycast", "scummvm", "mame", "primehack"):
+                       "melonds", "ryubing", "eden", "xemu", "vita3k", "shadps4", "flycast", "scummvm", "mame", "primehack"):
             self.assertIn(wanted, catalogue.BY_ID)
 
     def test_every_source_has_a_fixture_and_picks_one_linux_file(self):
@@ -42,6 +42,7 @@ class CatalogueTest(unittest.TestCase):
             "azahar": ("azahar.AppImage", "2126.2"),
             "melonds": ("melonDS-1.1-appimage-x86_64.zip", "1.1"),
             "ryubing": ("ryujinx-1.3.3-x64.AppImage", "1.3.3"),
+            "eden": ("Eden-Linux-v0.2.1-amd64-clang-pgo.AppImage", "0.2.1"),
             "xemu": ("xemu-0.8.139-x86_64.AppImage", "0.8.139"),
             "vita3k": ("Vita3K-x86_64.AppImage", None),
             "flycast": ("flycast-x86_64-2.7.AppImage", "2.7"),

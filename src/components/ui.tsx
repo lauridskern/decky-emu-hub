@@ -29,7 +29,7 @@ export const Progress: FC<{ value: number }> = ({ value }) => (
 /** A colour per emulator, for its icon tile. */
 const TINTS: Record<string, string> = {
   retroarch: "#5b5fc7", dolphin: "#3d8bd9", pcsx2: "#3567c9", duckstation: "#c79a2a", ppsspp: "#2f9fb8",
-  cemu: "#3aa3c2", rpcs3: "#8c3fd0", azahar: "#c74a3a", melonds: "#c45a8a", ryubing: "#d2453c",
+  cemu: "#3aa3c2", rpcs3: "#8c3fd0", azahar: "#c74a3a", melonds: "#c45a8a", ryubing: "#d2453c", eden: "#3f9b6e",
   xemu: "#3e9b4f", vita3k: "#2b7ad6", shadps4: "#5b6ad6", flycast: "#d9822b", primehack: "#d06a2a",
   scummvm: "#46a36a", mame: "#8a8f99",
 };

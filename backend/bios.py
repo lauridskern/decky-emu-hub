@@ -37,8 +37,10 @@ BIOS: Dict[str, Dict[str, Any]] = {
     "switch": {
         "label": "Switch keys",
         "home_paths": [".config/Ryujinx/system/prod.keys",
-                       ".var/app/io.github.ryubing.Ryujinx/config/Ryujinx/system/prod.keys"],
-        "hint": "prod.keys from your own Switch, then firmware from inside Ryubing",
+                       ".var/app/io.github.ryubing.Ryujinx/config/Ryujinx/system/prod.keys",
+                       ".local/share/eden/keys/prod.keys",
+                       ".var/app/dev.eden_emu.eden/data/eden/keys/prod.keys"],
+        "hint": "prod.keys from your own Switch, then firmware from inside Ryubing or Eden",
     },
     "xbox": {
         "label": "Xbox MCPX boot ROM",

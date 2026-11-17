@@ -230,6 +230,25 @@ PRESETS: Dict[str, Dict[str, Any]] = {
                     "docked_mode": True, "game_dirs": ["{roms:switch}"]},
         }],
     },
+    # UNTESTED ON A DECK. Key names from EmuDeck's configs/eden/config/qt-config.ini.
+    # A Qt key with `\\default=true` beside it is ignored, so both are written.
+    "eden": {
+        "summary": "Fullscreen, Switch folder in the game list, no exit prompt, no first-start wizard.",
+        "files": [{
+            "path": {"appimage": ".config/eden/qt-config.ini",
+                     "flatpak": ".var/app/dev.eden_emu.eden/config/eden/qt-config.ini"},
+            "format": "qtini",
+            "create": False,
+            "set": {
+                "keys": {"UI": {
+                    "fullscreen": "true", "fullscreen\\default": "false",
+                    "confirmClose": "false", "confirmClose\\default": "false",
+                    "firstStart": "false", "firstStart\\default": "false",
+                }},
+                "gamedirs": ["{roms:switch}"],
+            },
+        }],
+    },
     # UNTESTED ON A DECK
     "xemu": {
         "summary": "No welcome screen, no boot animation, MCPX boot ROM from the BIOS folder.",
@@ -302,6 +321,12 @@ def _apply_format(fmt: str, text: str, updates: Any, sep: Optional[str]) -> str:
         return configfmt.xml_set(text, updates)
     if fmt == "yaml":
         return configfmt.yaml_set(text, updates)
+    if fmt == "qtini":
+        # Qt settings (yuzu family): plain keys, plus folders for the game list.
+        text = configfmt.ini_set(text, updates.get("keys", {}), sep="=")
+        for folder in updates.get("gamedirs", []):
+            text = configfmt.qt_gamedir_add(text, folder)
+        return text
     raise ValueError(fmt)
 
 
@@ -317,6 +342,10 @@ def _read_back(fmt: str, text: str, updates: Any) -> bool:
         return all(configfmt.same(configfmt.json_get(text, key), wanted) for key, wanted in updates.items())
     if fmt == "xml":
         return all(configfmt.same(configfmt.xml_get(text, key), wanted) for key, wanted in updates.items())
+    if fmt == "qtini":
+        dirs = configfmt.qt_gamedirs(text)
+        return (_read_back("ini", text, updates.get("keys", {}))
+                and all(folder in dirs for folder in updates.get("gamedirs", [])))
     return False
 
 

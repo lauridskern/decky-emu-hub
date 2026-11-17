@@ -80,6 +80,14 @@ class DetectTest(unittest.TestCase):
         self.assertIn("vita3k", found)
         self.assertIn("ryubing", found)
 
+    def test_emudeck_eden_appimage(self):
+        write(os.path.join(self.home, "Applications", "Eden.AppImage"), ELF)
+        found = detect.detect_all(self.home, {}, {})
+        self.assertEqual(found["eden"]["method"], "appimage")
+        self.assertNotIn("ryubing", found)
+        found = detect.detect_all(tempfile.mkdtemp(), {}, {"dev.eden_emu.eden": {"version": "0.2.1", "installation": "user"}})
+        self.assertEqual(found["eden"]["app_id"], "dev.eden_emu.eden")
+
     def test_flathub_copy_of_an_appimage_emulator(self):
         found = detect.detect_all(self.home, {}, {"org.ppsspp.PPSSPP": {"version": "1.20.3", "installation": "system"}})
         self.assertEqual(found["ppsspp"], {"method": "flatpak", "app_id": "org.ppsspp.PPSSPP", "version": "1.20.3",
@@ -130,6 +138,9 @@ class BiosTest(unittest.TestCase):
         write(os.path.join(folder, "SCPH-70012_BIOS_V12_USA_200.BIN"))
         self.assertTrue(bios.report(["ps2"], folder, home)[0]["found"].endswith("200.BIN"))
         self.assertTrue(report["switch"]["found"].endswith("prod.keys"))
+        eden_only = tempfile.mkdtemp()
+        write(os.path.join(eden_only, ".local", "share", "eden", "keys", "prod.keys"))
+        self.assertIn("/eden/keys/prod.keys", bios.report(["switch"], folder, eden_only)[0]["found"])
 
 
 class Server:

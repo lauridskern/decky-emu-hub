@@ -4,7 +4,7 @@ Install, update and set up emulators on the Steam Deck without leaving Game
 Mode. A light EmuDeck, as a [Decky Loader](https://decky.xyz) plugin.
 
 - **One-button installs** for RetroArch, Dolphin, PCSX2, DuckStation, PPSSPP,
-  Cemu, RPCS3, Azahar, melonDS, Ryubing, xemu, Vita3K, shadPS4, Flycast,
+  Cemu, RPCS3, Azahar, melonDS, Ryubing, Eden, xemu, Vita3K, shadPS4, Flycast,
   PrimeHack, ScummVM and MAME, from each project's own releases (AppImages in
   `~/Applications`) or from Flathub.
 - **Updates**: a badge and a notification when a new version is out; update

@@ -164,6 +164,23 @@ EMULATORS: List[Dict[str, Any]] = [
         "preset": "ryubing",
     },
     {
+        "id": "eden",
+        "name": "Eden",
+        "blurb": "Nintendo Switch (from the yuzu family). Needs your own keys and firmware.",
+        "consoles": ["switch"],
+        "method": "appimage",
+        "file": "Eden.AppImage",
+        # Eden's GitHub releases repository was taken down (DMCA, March 2026);
+        # it publishes from its own Forgejo, files served by stable.eden-emu.dev.
+        # amd64 builds need x86-64-v3, which the Deck's Zen 2 has; "legacy" is
+        # for older CPUs. clang-pgo is the build Eden recommends.
+        "source": {"type": "forgejo", "api": "https://git.eden-emu.dev/api/v1/repos/eden-emu/eden",
+                   "asset": r"^Eden-Linux-v[0-9.]+-amd64-clang-pgo\.AppImage$"},
+        "flatpak_alt": "dev.eden_emu.eden",
+        "detect": [r"^eden.*\.appimage$"],
+        "preset": "eden",
+    },
+    {
         "id": "xemu",
         "name": "xemu",
         "blurb": "Original Xbox. Needs your own BIOS, MCPX boot ROM and hard disk image.",

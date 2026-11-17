@@ -349,7 +349,7 @@ is installed…" and Settings stayed empty, because `configfmt.py` imported
 - **Presets are untested on a Deck**, each of them. PCSX2/DuckStation pad
   bindings assume the Deck's controller is SDL pad 0 under Steam Input (true
   for EmuDeck's configs, which use the same names). Dolphin, Cemu, Azahar,
-  Ryubing, xemu, Flycast get no controller mapping; their own auto-mapping
+  Ryubing, Eden, xemu, Flycast get no controller mapping; their own auto-mapping
   applies. melonDS, Vita3K, shadPS4, ScummVM and MAME have no preset yet.
 - shadPS4 is installed from Flathub: upstream's Linux zip is the command-line
   build, and the launcher with a game list is only published as pre-releases.
@@ -357,6 +357,17 @@ is installed…" and Settings stayed empty, because `configfmt.py` imported
   updated through flatpak, new installs use the AppImage.
 - Ryubing is on its own Forgejo (`git.ryujinx.app`), queried through its
   Gitea-style API (`/api/v1/repos/projects/Ryubing/releases/latest`).
+- Eden's GitHub releases repository (`eden-emulator/Releases`) was taken down
+  by a DMCA notice in March 2026 (HTTP 451). Eden publishes from its own
+  Forgejo (`git.eden-emu.dev/api/v1/repos/eden-emu/eden`); the files are
+  served by `stable.eden-emu.dev` and the API reports their size as 0, so the
+  free-space check uses Content-Length. The asset is the amd64 clang-pgo
+  AppImage (needs x86-64-v3, which the Deck's Zen 2 has; `legacy` is for
+  older CPUs). Flathub copy: `dev.eden_emu.eden`. EmuDeck's file name is
+  `Eden.AppImage`. Its preset (`qtini`: Qt settings plus the numbered
+  `Paths\gamedirs\<n>` list, `configfmt.qt_gamedir_add`) uses the key names
+  from EmuDeck's `configs/eden/config/qt-config.ini`; a Qt key with
+  `\default=true` next to it is ignored, so both are written.
 - New Flathub installs go to the user installation. Updating an app in the
   system installation (EmuDeck, Discover) assumes SteamOS's polkit rules let
   the deck user do that without a password prompt, as Discover does.

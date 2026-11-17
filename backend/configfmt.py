@@ -256,6 +256,39 @@ def xml_get(text: str, tag: str) -> Any:
     return "" if "<" in inner else _xml_unescape(inner)
 
 
+def qt_gamedirs(text: str, section: str = "UI") -> List[str]:
+    """Folders in a Qt settings list `Paths\\gamedirs\\<n>\\path` (yuzu family)."""
+    lines = text.splitlines()
+    pattern = re.compile(r"^\s*Paths\\gamedirs\\(\d+)\\path\s*=\s*(.*?)\s*$")
+    found: List[Tuple[int, str]] = []
+    for name, start, end in _sections(lines):
+        if name != section:
+            continue
+        for i in range(start, end):
+            m = pattern.match(lines[i])
+            if m:
+                found.append((int(m.group(1)), m.group(2)))
+    return [path for _, path in sorted(found)]
+
+
+def qt_gamedir_add(text: str, path: str, section: str = "UI") -> str:
+    """Append a folder to that list (index size+1, then size), unless it is there."""
+    if path in qt_gamedirs(text, section):
+        return text
+    try:
+        size = int(ini_get(text, section, "Paths\\gamedirs\\size") or 0)
+    except ValueError:
+        size = 0
+    n = max(size, len(qt_gamedirs(text, section))) + 1
+    base = f"Paths\\gamedirs\\{n}\\"
+    return ini_set(text, {section: {
+        base + "deep_scan": "false", base + "deep_scan\\default": "true",
+        base + "expanded": "true", base + "expanded\\default": "true",
+        base + "path": path,
+        "Paths\\gamedirs\\size": str(n),
+    }}, sep="=")
+
+
 def yaml_scalar(value: Any) -> str:
     if isinstance(value, bool):
         return "true" if value else "false"

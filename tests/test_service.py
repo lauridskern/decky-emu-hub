@@ -46,7 +46,7 @@ class ServiceTest(unittest.TestCase):
     def test_state_and_update_check(self):
         state = asyncio.run(self.svc.check_updates(force=True))
         views = {v["id"]: v for v in state["emulators"]}
-        self.assertEqual(len(views), 17)
+        self.assertEqual(len(views), 18)
         self.assertEqual(views["pcsx2"]["installed"]["method"], "appimage")
         self.assertTrue(views["pcsx2"]["unknown_version"])
         self.assertFalse(views["pcsx2"]["update"])

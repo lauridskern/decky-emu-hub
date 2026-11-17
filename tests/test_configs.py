@@ -60,6 +60,21 @@ class FormatTest(unittest.TestCase):
         self.assertEqual(out["game_dirs"], ["/mine", "/lib/switch"])
         self.assertTrue(out["start_fullscreen"])
 
+    def test_qt_gamedirs(self):
+        text = (
+            "[UI]\nPaths\\gamedirs\\1\\path=SDMC\nPaths\\gamedirs\\2\\path=UserNAND\n"
+            "Paths\\gamedirs\\size=2\nfullscreen=false\n[System]\nuse_docked_mode=1\n"
+        )
+        self.assertEqual(configfmt.qt_gamedirs(text), ["SDMC", "UserNAND"])
+        out = configfmt.qt_gamedir_add(text, "/lib/roms/switch")
+        self.assertEqual(configfmt.qt_gamedirs(out), ["SDMC", "UserNAND", "/lib/roms/switch"])
+        self.assertEqual(configfmt.ini_get(out, "UI", "Paths\\gamedirs\\size"), "3")
+        self.assertEqual(configfmt.ini_get(out, "UI", "Paths\\gamedirs\\3\\deep_scan"), "false")
+        self.assertEqual(configfmt.qt_gamedir_add(out, "/lib/roms/switch"), out)      # never twice
+        self.assertIn("[System]\nuse_docked_mode=1", out)                              # other sections kept
+        empty = configfmt.qt_gamedir_add("", "/r")
+        self.assertEqual(configfmt.qt_gamedirs(empty), ["/r"])
+
     def test_xml_keeps_the_rest_of_the_file(self):
         text = (
             '<?xml version="1.0" encoding="UTF-8"?>\n<content>\n\t<logflag>0</logflag>\n'
@@ -178,6 +193,22 @@ class PresetTest(unittest.TestCase):
         self.assertEqual(data["version"], 73)
         self.assertEqual(data["game_dirs"], [f"{self.root}/roms/switch"])
 
+    def test_eden_preset(self):
+        target = self.path(".config/eden/qt-config.ini")
+        self.assertEqual(presets.status("eden", "appimage", self.home, self.root), "waiting")
+        os.makedirs(os.path.dirname(target))
+        with open(target, "w") as handle:
+            handle.write("[UI]\nfullscreen=false\nfullscreen\\default=true\nPaths\\gamedirs\\1\\path=SDMC\n"
+                         "Paths\\gamedirs\\size=1\n[Renderer]\nbackend=1\n")
+        self.assertTrue(presets.apply("eden", "eden", "appimage", self.home, self.root, self.backups)["ok"])
+        self.assertEqual(presets.status("eden", "appimage", self.home, self.root), "applied")
+        with open(target) as handle:
+            text = handle.read()
+        self.assertEqual(configfmt.ini_get(text, "UI", "fullscreen"), "true")
+        self.assertEqual(configfmt.ini_get(text, "UI", "fullscreen\\default"), "false")
+        self.assertEqual(configfmt.qt_gamedirs(text), ["SDMC", f"{self.root}/roms/switch"])
+        self.assertIn("[Renderer]\nbackend=1", text)
+
     def test_emudeck_folder_names_win(self):
         os.makedirs(os.path.join(self.root, "roms", "gamecube"))
         self.assertTrue(presets.apply("dolphin", "dolphin", "flatpak", self.home, self.root, self.backups)["ok"])
@@ -204,7 +235,7 @@ class PresetTest(unittest.TestCase):
                 for spec in files:
                     if not spec.get("create"):
                         os.makedirs(os.path.dirname(spec["abs"]), exist_ok=True)
-                        seed = {"json": "{}", "xml": "<content></content>", "yaml": "Core:\n  x: 1\n"}[spec["format"]]
+                        seed = {"json": "{}", "xml": "<content></content>", "yaml": "Core:\n  x: 1\n", "qtini": "[UI]\n"}[spec["format"]]
                         with open(spec["abs"], "w") as handle:
                             handle.write(seed)
                 if not files:
