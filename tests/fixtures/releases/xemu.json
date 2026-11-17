@@ -1,0 +1,134 @@
+{
+ "tag_name": "v0.8.139",
+ "name": "v0.8.139",
+ "published_at": "2026-10-21T21:43:18Z",
+ "prerelease": false,
+ "assets": [
+  {
+   "name": "xemu-0.8.139-aarch64.AppImage",
+   "size": 16706056,
+   "updated_at": "2026-10-21T21:42:31Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-aarch64.AppImage"
+  },
+  {
+   "name": "xemu-0.8.139-dbg-aarch64.AppImage",
+   "size": 16726536,
+   "updated_at": "2026-10-21T21:42:30Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-dbg-aarch64.AppImage"
+  },
+  {
+   "name": "xemu-0.8.139-dbg-macos-universal-unsigned.zip",
+   "size": 25770215,
+   "updated_at": "2026-10-21T21:42:31Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-dbg-macos-universal-unsigned.zip"
+  },
+  {
+   "name": "xemu-0.8.139-dbg-windows-arm64-pdb.zip",
+   "size": 4691928,
+   "updated_at": "2026-10-21T21:42:30Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-dbg-windows-arm64-pdb.zip"
+  },
+  {
+   "name": "xemu-0.8.139-dbg-windows-arm64.zip",
+   "size": 11023479,
+   "updated_at": "2026-10-21T21:42:30Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-dbg-windows-arm64.zip"
+  },
+  {
+   "name": "xemu-0.8.139-dbg-windows-x86_64-pdb.zip",
+   "size": 9444737,
+   "updated_at": "2026-10-21T21:42:30Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-dbg-windows-x86_64-pdb.zip"
+  },
+  {
+   "name": "xemu-0.8.139-dbg-windows-x86_64.zip",
+   "size": 11816480,
+   "updated_at": "2026-10-21T21:42:30Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-dbg-windows-x86_64.zip"
+  },
+  {
+   "name": "xemu-0.8.139-dbg-x86_64.AppImage",
+   "size": 17877496,
+   "updated_at": "2026-10-21T21:42:30Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-dbg-x86_64.AppImage"
+  },
+  {
+   "name": "xemu-0.8.139-macos-universal-unsigned.zip",
+   "size": 21356714,
+   "updated_at": "2026-10-21T21:42:30Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-macos-universal-unsigned.zip"
+  },
+  {
+   "name": "xemu-0.8.139-macos-universal.zip",
+   "size": 21479533,
+   "updated_at": "2026-10-21T21:43:16Z",
+   "created_at": "2026-10-21T21:43:15Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-macos-universal.zip"
+  },
+  {
+   "name": "xemu-0.8.139-windows-arm64-pdb.zip",
+   "size": 3174975,
+   "updated_at": "2026-10-21T21:42:29Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-windows-arm64-pdb.zip"
+  },
+  {
+   "name": "xemu-0.8.139-windows-arm64.zip",
+   "size": 10026353,
+   "updated_at": "2026-10-21T21:42:30Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-windows-arm64.zip"
+  },
+  {
+   "name": "xemu-0.8.139-windows-x86_64-pdb.zip",
+   "size": 480056,
+   "updated_at": "2026-10-21T21:42:29Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-windows-x86_64-pdb.zip"
+  },
+  {
+   "name": "xemu-0.8.139-windows-x86_64.zip",
+   "size": 11420991,
+   "updated_at": "2026-10-21T21:42:30Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-windows-x86_64.zip"
+  },
+  {
+   "name": "xemu-0.8.139-x86_64.AppImage",
+   "size": 17971704,
+   "updated_at": "2026-10-21T21:42:30Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-x86_64.AppImage"
+  },
+  {
+   "name": "xemu-0.8.139.tar.zst",
+   "size": 99819713,
+   "updated_at": "2026-10-21T21:42:33Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139.tar.zst"
+  },
+  {
+   "name": "xemu-win-aarch64-release.zip",
+   "size": 10026353,
+   "updated_at": "2026-10-21T21:42:30Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-win-aarch64-release.zip"
+  },
+  {
+   "name": "xemu-win-x86_64-release.zip",
+   "size": 11420991,
+   "updated_at": "2026-10-21T21:42:30Z",
+   "created_at": "2026-10-21T21:42:29Z",
+   "browser_download_url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-win-x86_64-release.zip"
+  }
+ ]
+}

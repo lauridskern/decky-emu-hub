@@ -1,0 +1,50 @@
+{
+ "tag_name": "v2.8.2",
+ "name": "v2.8.2",
+ "published_at": "2026-09-04T23:04:48Z",
+ "prerelease": false,
+ "assets": [
+  {
+   "name": "pcsx2-v2.8.2-linux-appimage-x64-Qt.AppImage",
+   "size": 60119544,
+   "updated_at": "2026-09-04T16:37:30Z",
+   "created_at": "2026-09-04T16:37:28Z",
+   "browser_download_url": "https://github.com/PCSX2/pcsx2/releases/download/v2.8.2/pcsx2-v2.8.2-linux-appimage-x64-Qt.AppImage"
+  },
+  {
+   "name": "pcsx2-v2.8.2-linux-flatpak-x64-Qt.flatpak",
+   "size": 28120408,
+   "updated_at": "2026-09-04T16:37:29Z",
+   "created_at": "2026-09-04T16:37:28Z",
+   "browser_download_url": "https://github.com/PCSX2/pcsx2/releases/download/v2.8.2/pcsx2-v2.8.2-linux-flatpak-x64-Qt.flatpak"
+  },
+  {
+   "name": "pcsx2-v2.8.2-macos-Qt.tar.xz",
+   "size": 24377200,
+   "updated_at": "2026-09-04T16:37:30Z",
+   "created_at": "2026-09-04T16:37:28Z",
+   "browser_download_url": "https://github.com/PCSX2/pcsx2/releases/download/v2.8.2/pcsx2-v2.8.2-macos-Qt.tar.xz"
+  },
+  {
+   "name": "pcsx2-v2.8.2-windows-x64-installer.exe",
+   "size": 46714216,
+   "updated_at": "2026-09-04T23:04:06Z",
+   "created_at": "2026-09-04T23:04:04Z",
+   "browser_download_url": "https://github.com/PCSX2/pcsx2/releases/download/v2.8.2/pcsx2-v2.8.2-windows-x64-installer.exe"
+  },
+  {
+   "name": "pcsx2-v2.8.2-windows-x64-Qt-symbols.7z",
+   "size": 20962364,
+   "updated_at": "2026-09-04T16:37:29Z",
+   "created_at": "2026-09-04T16:37:28Z",
+   "browser_download_url": "https://github.com/PCSX2/pcsx2/releases/download/v2.8.2/pcsx2-v2.8.2-windows-x64-Qt-symbols.7z"
+  },
+  {
+   "name": "pcsx2-v2.8.2-windows-x64-Qt.7z",
+   "size": 25670075,
+   "updated_at": "2026-09-04T16:37:30Z",
+   "created_at": "2026-09-04T16:37:28Z",
+   "browser_download_url": "https://github.com/PCSX2/pcsx2/releases/download/v2.8.2/pcsx2-v2.8.2-windows-x64-Qt.7z"
+  }
+ ]
+}

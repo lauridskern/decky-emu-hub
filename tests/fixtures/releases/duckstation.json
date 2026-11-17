@@ -1,0 +1,106 @@
+{
+ "tag_name": "latest",
+ "name": "Latest Rolling Release",
+ "published_at": "2026-11-07T03:09:11Z",
+ "prerelease": false,
+ "assets": [
+  {
+   "name": "DuckStation-arm64.AppImage",
+   "size": 88969472,
+   "updated_at": "2026-11-07T03:09:54Z",
+   "created_at": "2026-11-07T03:09:51Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/DuckStation-arm64.AppImage"
+  },
+  {
+   "name": "DuckStation-armhf.AppImage",
+   "size": 85724828,
+   "updated_at": "2026-11-07T03:09:59Z",
+   "created_at": "2026-11-07T03:09:55Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/DuckStation-armhf.AppImage"
+  },
+  {
+   "name": "duckstation-mac-release.zip",
+   "size": 97099171,
+   "updated_at": "2026-11-07T03:10:04Z",
+   "created_at": "2026-11-07T03:09:59Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/duckstation-mac-release.zip"
+  },
+  {
+   "name": "duckstation-windows-arm64-installer.exe",
+   "size": 43852052,
+   "updated_at": "2026-11-07T03:09:33Z",
+   "created_at": "2026-11-07T03:09:30Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/duckstation-windows-arm64-installer.exe"
+  },
+  {
+   "name": "duckstation-windows-arm64-release-symbols.7z",
+   "size": 12029271,
+   "updated_at": "2026-11-07T03:09:40Z",
+   "created_at": "2026-11-07T03:09:39Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/duckstation-windows-arm64-release-symbols.7z"
+  },
+  {
+   "name": "duckstation-windows-arm64-release.zip",
+   "size": 73843212,
+   "updated_at": "2026-11-07T03:09:38Z",
+   "created_at": "2026-11-07T03:09:34Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/duckstation-windows-arm64-release.zip"
+  },
+  {
+   "name": "duckstation-windows-x64-installer.exe",
+   "size": 46568319,
+   "updated_at": "2026-11-07T03:09:15Z",
+   "created_at": "2026-11-07T03:09:12Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/duckstation-windows-x64-installer.exe"
+  },
+  {
+   "name": "duckstation-windows-x64-release-symbols.7z",
+   "size": 12383576,
+   "updated_at": "2026-11-07T03:09:21Z",
+   "created_at": "2026-11-07T03:09:20Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/duckstation-windows-x64-release-symbols.7z"
+  },
+  {
+   "name": "duckstation-windows-x64-release.zip",
+   "size": 75019319,
+   "updated_at": "2026-11-07T03:09:20Z",
+   "created_at": "2026-11-07T03:09:15Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/duckstation-windows-x64-release.zip"
+  },
+  {
+   "name": "duckstation-windows-x64-sse2-installer.exe",
+   "size": 46568328,
+   "updated_at": "2026-11-07T03:09:24Z",
+   "created_at": "2026-11-07T03:09:22Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/duckstation-windows-x64-sse2-installer.exe"
+  },
+  {
+   "name": "duckstation-windows-x64-sse2-release-symbols.7z",
+   "size": 12391000,
+   "updated_at": "2026-11-07T03:09:30Z",
+   "created_at": "2026-11-07T03:09:28Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/duckstation-windows-x64-sse2-release-symbols.7z"
+  },
+  {
+   "name": "duckstation-windows-x64-sse2-release.zip",
+   "size": 75022687,
+   "updated_at": "2026-11-07T03:09:28Z",
+   "created_at": "2026-11-07T03:09:24Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/duckstation-windows-x64-sse2-release.zip"
+  },
+  {
+   "name": "DuckStation-x64-SSE2.AppImage",
+   "size": 95650080,
+   "updated_at": "2026-11-07T03:09:50Z",
+   "created_at": "2026-11-07T03:09:46Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/DuckStation-x64-SSE2.AppImage"
+  },
+  {
+   "name": "DuckStation-x64.AppImage",
+   "size": 95629600,
+   "updated_at": "2026-11-07T03:09:45Z",
+   "created_at": "2026-11-07T03:09:40Z",
+   "browser_download_url": "https://github.com/stenzek/duckstation/releases/download/latest/DuckStation-x64.AppImage"
+  }
+ ]
+}

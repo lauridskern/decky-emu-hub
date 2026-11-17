@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.log
+__pycache__/
+*.pyc
+tools/preview/preview.js
+.DS_Store
+EmuDecky.zip
+/package/

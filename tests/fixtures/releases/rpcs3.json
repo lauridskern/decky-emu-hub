@@ -1,0 +1,15 @@
+{
+ "tag_name": "build-0ebb63697666a54b44a4de69ef222c4ecee0001a",
+ "name": "0.0.43-20623",
+ "published_at": "2026-11-17T20:00:38Z",
+ "prerelease": false,
+ "assets": [
+  {
+   "name": "rpcs3-v0.0.43-20623-0ebb6369_linux64.AppImage",
+   "size": 83286465,
+   "updated_at": "2026-11-17T20:00:42Z",
+   "created_at": "2026-11-17T20:00:39Z",
+   "browser_download_url": "https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-0ebb63697666a54b44a4de69ef222c4ecee0001a/rpcs3-v0.0.43-20623-0ebb6369_linux64.AppImage"
+  }
+ ]
+}

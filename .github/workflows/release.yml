@@ -1,0 +1,68 @@
+name: Build and release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Backend tests
+        run: python3 -m unittest discover -s tests
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build the frontend bundle
+        run: npm run build
+
+      - name: Stamp the version from the tag
+        run: |
+          # Decky shows the version from package.json, so it has to match the tag.
+          VERSION="${GITHUB_REF_NAME#v}"
+          python3 - "$VERSION" <<'PYEOF'
+          import json, pathlib, sys
+          version = sys.argv[1]
+          for name in ("package.json", "package-lock.json"):
+              path = pathlib.Path(name)
+              data = json.loads(path.read_text())
+              data["version"] = version
+              if name == "package-lock.json" and "" in data.get("packages", {}):
+                  data["packages"][""]["version"] = version
+              path.write_text(json.dumps(data, indent=2) + "\n")
+          PYEOF
+          echo "version stamped: $VERSION"
+
+      - name: Package the plugin
+        run: |
+          # Decky unpacks the zip into ~/homebrew/plugins and looks for a FOLDER
+          # that holds plugin.json, so the package has one top level directory.
+          mkdir -p package/emudecky
+          rsync -a \
+            --exclude "node_modules/" --exclude "src/" --exclude ".git/" \
+            --exclude ".github/" --exclude "__pycache__/" --exclude "*.pyc" \
+            --exclude "tests/" --exclude ".claude/" --exclude "docs/" \
+            --exclude "dist/*.map" --exclude "tools/" --exclude "package/" \
+            ./ package/emudecky/
+          cd package && zip -qr ../EmuDecky.zip emudecky
+
+      - name: Check the package the way Decky installs it
+        run: python3 tools/verify_package.py EmuDecky.zip
+
+      - name: Attach the package to a release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: EmuDecky.zip
+          generate_release_notes: true

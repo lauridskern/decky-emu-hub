@@ -1,0 +1,50 @@
+{
+ "tag_name": "v2.7",
+ "name": "v2.7: Localization, Naomi multiscreen",
+ "published_at": "2026-08-19T11:47:09Z",
+ "prerelease": false,
+ "assets": [
+  {
+   "name": "flycast-2.7.apk",
+   "size": 36280670,
+   "updated_at": "2026-08-19T12:25:40Z",
+   "created_at": "2026-08-19T12:25:38Z",
+   "browser_download_url": "https://github.com/flyinghead/flycast/releases/download/v2.7/flycast-2.7.apk"
+  },
+  {
+   "name": "flycast-2.7.appx",
+   "size": 5641655,
+   "updated_at": "2026-08-19T12:25:41Z",
+   "created_at": "2026-08-19T12:25:41Z",
+   "browser_download_url": "https://github.com/flyinghead/flycast/releases/download/v2.7/flycast-2.7.appx"
+  },
+  {
+   "name": "flycast-2.7.nro",
+   "size": 31907635,
+   "updated_at": "2026-08-19T12:25:43Z",
+   "created_at": "2026-08-19T12:25:42Z",
+   "browser_download_url": "https://github.com/flyinghead/flycast/releases/download/v2.7/flycast-2.7.nro"
+  },
+  {
+   "name": "flycast-macOS-2.7.zip",
+   "size": 19424997,
+   "updated_at": "2026-08-19T12:25:45Z",
+   "created_at": "2026-08-19T12:25:43Z",
+   "browser_download_url": "https://github.com/flyinghead/flycast/releases/download/v2.7/flycast-macOS-2.7.zip"
+  },
+  {
+   "name": "flycast-win64-2.7.zip",
+   "size": 9885102,
+   "updated_at": "2026-08-19T12:25:46Z",
+   "created_at": "2026-08-19T12:25:45Z",
+   "browser_download_url": "https://github.com/flyinghead/flycast/releases/download/v2.7/flycast-win64-2.7.zip"
+  },
+  {
+   "name": "flycast-x86_64-2.7.AppImage",
+   "size": 20396536,
+   "updated_at": "2026-08-19T12:40:01Z",
+   "created_at": "2026-08-19T12:39:59Z",
+   "browser_download_url": "https://github.com/flyinghead/flycast/releases/download/v2.7/flycast-x86_64-2.7.AppImage"
+  }
+ ]
+}

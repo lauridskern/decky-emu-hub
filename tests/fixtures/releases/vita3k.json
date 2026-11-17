@@ -1,0 +1,85 @@
+{
+ "tag_name": "continuous",
+ "name": "Automatic CI builds",
+ "published_at": "2026-11-17T14:36:45Z",
+ "prerelease": false,
+ "assets": [
+  {
+   "name": "android-latest.apk",
+   "size": 29688987,
+   "updated_at": "2026-11-17T14:36:41Z",
+   "created_at": "2026-11-17T14:36:39Z",
+   "browser_download_url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/android-latest.apk"
+  },
+  {
+   "name": "macos-arm64-latest.dmg",
+   "size": 60717744,
+   "updated_at": "2026-11-17T14:36:43Z",
+   "created_at": "2026-11-17T14:36:40Z",
+   "browser_download_url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/macos-arm64-latest.dmg"
+  },
+  {
+   "name": "macos-latest.dmg",
+   "size": 62614102,
+   "updated_at": "2026-11-17T14:36:39Z",
+   "created_at": "2026-11-17T14:36:34Z",
+   "browser_download_url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/macos-latest.dmg"
+  },
+  {
+   "name": "ubuntu-aarch64-latest.zip",
+   "size": 18042209,
+   "updated_at": "2026-11-17T14:36:40Z",
+   "created_at": "2026-11-17T14:36:39Z",
+   "browser_download_url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-aarch64-latest.zip"
+  },
+  {
+   "name": "ubuntu-latest.zip",
+   "size": 19560158,
+   "updated_at": "2026-11-17T14:36:39Z",
+   "created_at": "2026-11-17T14:36:38Z",
+   "browser_download_url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip"
+  },
+  {
+   "name": "Vita3K-aarch64.AppImage",
+   "size": 89829542,
+   "updated_at": "2026-11-17T14:36:39Z",
+   "created_at": "2026-11-17T14:36:35Z",
+   "browser_download_url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/Vita3K-aarch64.AppImage"
+  },
+  {
+   "name": "Vita3K-aarch64.AppImage.zsync",
+   "size": 307219,
+   "updated_at": "2026-11-17T14:36:35Z",
+   "created_at": "2026-11-17T14:36:34Z",
+   "browser_download_url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/Vita3K-aarch64.AppImage.zsync"
+  },
+  {
+   "name": "Vita3K-x86_64.AppImage",
+   "size": 89800900,
+   "updated_at": "2026-11-17T14:36:41Z",
+   "created_at": "2026-11-17T14:36:35Z",
+   "browser_download_url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/Vita3K-x86_64.AppImage"
+  },
+  {
+   "name": "Vita3K-x86_64.AppImage.zsync",
+   "size": 307119,
+   "updated_at": "2026-11-17T14:36:35Z",
+   "created_at": "2026-11-17T14:36:34Z",
+   "browser_download_url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/Vita3K-x86_64.AppImage.zsync"
+  },
+  {
+   "name": "windows-arm64-latest.zip",
+   "size": 63721221,
+   "updated_at": "2026-11-17T14:36:44Z",
+   "created_at": "2026-11-17T14:36:41Z",
+   "browser_download_url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/windows-arm64-latest.zip"
+  },
+  {
+   "name": "windows-latest.zip",
+   "size": 38242662,
+   "updated_at": "2026-11-17T14:36:37Z",
+   "created_at": "2026-11-17T14:36:34Z",
+   "browser_download_url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/windows-latest.zip"
+  }
+ ]
+}

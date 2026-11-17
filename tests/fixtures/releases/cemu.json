@@ -1,0 +1,36 @@
+{
+ "tag_name": "v2.6",
+ "name": "Cemu 2.6",
+ "published_at": "2025-02-06T13:18:18Z",
+ "prerelease": false,
+ "assets": [
+  {
+   "name": "cemu-2.6-macos-12-x64.dmg",
+   "size": 36588188,
+   "updated_at": "2025-02-06T12:40:58Z",
+   "created_at": "2025-02-06T12:40:57Z",
+   "browser_download_url": "https://github.com/cemu-project/Cemu/releases/download/v2.6/cemu-2.6-macos-12-x64.dmg"
+  },
+  {
+   "name": "cemu-2.6-ubuntu-22.04-x64.zip",
+   "size": 31825643,
+   "updated_at": "2026-05-12T15:12:01Z",
+   "created_at": "2026-05-12T15:11:40Z",
+   "browser_download_url": "https://github.com/cemu-project/Cemu/releases/download/v2.6/cemu-2.6-ubuntu-22.04-x64.zip"
+  },
+  {
+   "name": "cemu-2.6-windows-x64.zip",
+   "size": 26374093,
+   "updated_at": "2025-02-06T12:40:58Z",
+   "created_at": "2025-02-06T12:40:57Z",
+   "browser_download_url": "https://github.com/cemu-project/Cemu/releases/download/v2.6/cemu-2.6-windows-x64.zip"
+  },
+  {
+   "name": "Cemu-2.6-x86_64.AppImage",
+   "size": 61423960,
+   "updated_at": "2026-05-12T15:12:39Z",
+   "created_at": "2026-05-12T15:12:01Z",
+   "browser_download_url": "https://github.com/cemu-project/Cemu/releases/download/v2.6/Cemu-2.6-x86_64.AppImage"
+  }
+ ]
+}

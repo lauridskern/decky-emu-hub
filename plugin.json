@@ -1,0 +1,17 @@
+{
+  "name": "EmuDecky",
+  "author": "EmuDecky contributors",
+  "flags": [
+    "debug"
+  ],
+  "api_version": 1,
+  "publish": {
+    "tags": [
+      "emulators",
+      "emudeck",
+      "updater",
+      "retroarch"
+    ],
+    "description": "Install, update and set up emulators for the Steam Deck without leaving Game Mode."
+  }
+}
